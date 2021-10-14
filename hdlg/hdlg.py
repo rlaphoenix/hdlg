@@ -23,6 +23,7 @@ from PySide2 import QtCore
 from PySide2.QtWidgets import QApplication
 
 from hdlg.config import Directories
+from hdlg.ui.main import Main
 
 
 def main():
@@ -32,6 +33,9 @@ def main():
     app = QApplication(sys.argv)
     app.setStyle("fusion")
     app.setStyleSheet((Directories.root / "ui" / "app.qss").read_text("utf8"))
+
+    window = Main()
+    window.show()
 
     sys.exit(app.exec_())
 
