@@ -14,4 +14,12 @@ like to contribute artwork to the project, let me know!
 
 ## To-do
 
-- [ ] Everything.
+- [ ] Craft initial GUI with Qt.
+- [ ] Create a file based settings system.
+- [ ] Add local PS2 HDD connection option.
+- [ ] Add remote PS2 HDD (samba) connection option.
+- [ ] List installed games of selected HDD.
+- [ ] Add button to install a new game to selected HDD.
+- [ ] Add PyInstaller support (PyInstaller spec file).
+- [ ] Add information about a PS2 HDD like size, space used, games installed, count games by game type (PS2 DVD/CD, PS1), etc.
+
