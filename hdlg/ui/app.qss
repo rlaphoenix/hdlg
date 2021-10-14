@@ -17,6 +17,17 @@ QPushButton:disabled {
   background-color: rgb(39, 39, 39);
 }
 
+QPushButton#installButton {
+	background-color: rgb(0, 105, 192);
+	text-align: center;
+}
+QPushButton#installButton:hover:!pressed {
+	background-color: rgb(30, 135, 222);
+}
+QPushButton#installButton:disabled {
+	background-color: transparent;
+}
+
 QTextEdit {
 	background-color: rgb(24, 24, 24);
 	border-radius: 4px;
