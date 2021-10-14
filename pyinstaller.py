@@ -75,7 +75,7 @@ run([
 VERSION_4_TUP = tuple(map(int, ("%s.0" % VERSION).split(".")))
 VERSION_4_STR = ".".join(map(str, VERSION_4_TUP))
 SetVersion(
-    "dist/{0}.exe".format(NAME),
+    ["dist/{0}/{0}", "dist/{0}"][ONE_FILE].format(NAME) + ".exe",
     VSVersionInfo(
         ffi=FixedFileInfo(
             filevers=VERSION_4_TUP,
