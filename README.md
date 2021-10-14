@@ -25,7 +25,7 @@ If you wish to manually install from the source, take a look at [Building](#buil
 
 ## To-do
 
-- [ ] Craft initial GUI with Qt.
+- [x] Craft initial GUI with Qt.
 - [ ] Create a file based settings system.
 - [ ] Add local PS2 HDD connection option.
 - [ ] Add remote PS2 HDD (samba) connection option.
