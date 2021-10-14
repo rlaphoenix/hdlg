@@ -1,0 +1,55 @@
+* {
+	color: rgb(210, 211, 211);
+	background-color: rgb(32, 34, 37);
+}
+
+QPushButton {
+	border: none;
+	background-color: rgb(109, 109, 109);
+	border-radius: 2px;
+	padding: 4px 8px;
+	text-align: left;
+}
+QPushButton:hover:!pressed {
+  background-color: rgb(139, 139, 139);
+}
+QPushButton:disabled {
+  background-color: rgb(39, 39, 39);
+}
+
+QTextEdit {
+	background-color: rgb(24, 24, 24);
+	border-radius: 4px;
+}
+
+QScrollBar {
+	border: none;
+	border-radius: 1px;
+}
+QScrollBar:vertical {
+	width: 8px;
+	margin-left: 4px;
+}
+QScrollBar:horizontal {
+	height: 8px;
+	margin-top: 4px;
+}
+QScrollBar:add-line,
+QScrollBar:sub-line {
+	width: 0px;
+}
+QScrollBar:handle {
+	background: white;
+	border-radius: 2px;
+}
+
+QProgressBar {
+    margin: -1px -1px -1px -1px;
+    border: none;
+    background-color: rgb(24, 24, 24);
+    max-height: 5px;
+}
+
+QMenuBar {
+	border-bottom: 1px solid rgb(24, 24, 24);
+}
