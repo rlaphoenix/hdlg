@@ -16,8 +16,21 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import os
+import sys
+
+from PySide2 import QtCore
+from PySide2.QtWidgets import QApplication
+
+
 def main():
-    pass
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+
+    app = QApplication(sys.argv)
+    app.setStyle("fusion")
+
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
