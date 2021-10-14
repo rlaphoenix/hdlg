@@ -7,6 +7,7 @@
 [![PyPI status](https://img.shields.io/pypi/status/hdlg)](https://pypi.org/project/hdlg)
 [![Contributors](https://img.shields.io/github/contributors/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/graphs/contributors)
 [![GitHub issues](https://img.shields.io/github/issues/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/issues)
+![Build](https://github.com/rlaphoenix/hdlg/workflows/Build/badge.svg?branch=master)
 
 HDLG is a modern cross-platform GUI for hdl-dump with Batch installation capabilities.
 
