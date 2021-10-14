@@ -22,4 +22,6 @@ like to contribute artwork to the project, let me know!
 - [ ] Add button to install a new game to selected HDD.
 - [ ] Add PyInstaller support (PyInstaller spec file).
 - [ ] Add information about a PS2 HDD like size, space used, games installed, count games by game type (PS2 DVD/CD, PS1), etc.
+- [ ] Push to PyPI and add relevant Badges.
+
 
