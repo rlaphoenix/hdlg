@@ -22,6 +22,8 @@ import sys
 from PySide2 import QtCore
 from PySide2.QtWidgets import QApplication
 
+from hdlg.config import Directories
+
 
 def main():
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
@@ -29,6 +31,7 @@ def main():
 
     app = QApplication(sys.argv)
     app.setStyle("fusion")
+    app.setStyleSheet((Directories.root / "ui" / "app.qss").read_text("utf8"))
 
     sys.exit(app.exec_())
 

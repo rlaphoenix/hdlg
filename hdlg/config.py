@@ -24,10 +24,3 @@ from appdirs import AppDirs
 class Directories:
     app_dirs = AppDirs("hdlg", False)
     root = Path(__file__).resolve().parent  # root of package/src
-
-
-class Files:
-    @staticmethod
-    def qss(name):
-        return (Directories.root / "ui" / f"{name}.qss").read_text("utf8")
-
