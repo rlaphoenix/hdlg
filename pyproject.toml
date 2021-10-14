@@ -1,0 +1,30 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "hdlg"
+version = "0.0.1"
+description = "Modern cross-platform GUI for hdl-dump."
+license = "GPL-3.0-or-later"
+authors = ["PHOENiX <rlaphoenix@pm.me>"]
+readme = "README.md"
+repository = "https://github.com/rlaphoenix/hdlg"
+keywords = ["ps2", "hdl-dump", "ps2-hdd", "ps2-game-installer"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Games/Entertainment",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.6,<3.10"
+PySide2 = "^5.15.2"
+
+[tool.poetry.scripts]
+hdlg = "hdlg.hdlg:main"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/rlaphoenix/hdlg/issues"
