@@ -1,6 +1,5 @@
 # HDLG
 
-[![Pull requests welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](http://makeapullrequest.com)
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/rlaphoenix/hdlg/blob/master/LICENSE)
 [![PyPI version](https://img.shields.io/pypi/v/hdlg)](https://pypi.org/project/hdlg)
 [![Python versions](https://img.shields.io/pypi/pyversions/hdlg)](https://pypi.org/project/hdlg)
