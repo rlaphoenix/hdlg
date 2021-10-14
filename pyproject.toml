@@ -22,6 +22,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.6,<3.10"
 PySide2 = "^5.15.2"
+appdirs = "^1.4.4"
 
 [tool.poetry.scripts]
 hdlg = "hdlg.hdlg:main"
