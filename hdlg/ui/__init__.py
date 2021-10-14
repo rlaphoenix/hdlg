@@ -9,10 +9,13 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QMessageBox
 
 from hdlg.config import Directories
+from hdlg.utils import camel_to_snake
 
 
 class BaseWindow:
     def __init__(self, name: str, flag=QtCore.Qt.Window) -> None:
+        name = camel_to_snake(name)
+
         loader = QUiLoader()
         loader.setWorkingDirectory(QtCore.QDir(str(Directories.root)))
         ui_file = QtCore.QFile(str(Directories.root / "ui" / f"{name}.ui"))
