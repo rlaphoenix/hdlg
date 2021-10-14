@@ -2,7 +2,10 @@
 
 [![Pull requests welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](http://makeapullrequest.com)
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/rlaphoenix/hdlg/blob/master/LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/rlaphoenix/Slipstream)](https://github.com/rlaphoenix/hdlg/graphs/contributors)
+[![PyPI version](https://img.shields.io/pypi/v/hdlg)](https://pypi.org/project/hdlg)
+[![Python versions](https://img.shields.io/pypi/pyversions/hdlg)](https://pypi.org/project/hdlg)
+[![PyPI status](https://img.shields.io/pypi/status/hdlg)](https://pypi.org/project/hdlg)
+[![Contributors](https://img.shields.io/github/contributors/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/graphs/contributors)
 [![GitHub issues](https://img.shields.io/github/issues/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/issues)
 
 HDLG is a modern cross-platform GUI for hdl-dump with Batch installation capabilities.
