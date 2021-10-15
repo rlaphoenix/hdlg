@@ -37,6 +37,38 @@ class Main(BaseWindow):
         device_list = self.window.deviceListDevices_2.layout()
         device_list.insertWidget(0, button)
 
+    def get_hdd_list(self) -> None:
+        """Finds HDD devices and adds them to the HDD list."""
+        self.clear_hdd_list()
+
+        self.thread = QtCore.QThread()
+        self.worker = MainWorker()
+        self.worker.moveToThread(self.thread)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        def manage_state():
+            self.window.refreshIcon.setEnabled(False)
+            self.window.statusbar.showMessage("Scanning HDDs...")
+
+        def on_finish(n: int):
+            self.window.refreshIcon.setEnabled(True)
+            self.window.statusbar.showMessage("Found %d HDDs" % n)
+
+        def on_error(e: Exception):
+            print(e)
+
+        self.thread.started.connect(manage_state)
+        self.worker.finished.connect(on_finish)
+        self.worker.error.connect(on_error)
+        self.worker.found_device.connect(self.add_hdd_button)
+
+        self.thread.started.connect(self.worker.find_hdds)
+        self.thread.start()
+
+
 class MainWorker(QtCore.QObject):
     error = QtCore.Signal(Exception)
     finished = QtCore.Signal(int)
