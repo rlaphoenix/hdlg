@@ -71,6 +71,8 @@ class HDD:
         return pos
 
     def read(self, size: int) -> bytes:
+        if size % 512 != 0:
+            raise ValueError("Size must be a multiple of 512 for some reason, Ask Windows.")
         res, data = win32file.ReadFile(self.handle, size, None)
         if res != 0:
             raise IOError(f"An error occurred: {res} {data}")
