@@ -4,6 +4,7 @@ import pythoncom
 import wmi
 from PySide2 import QtWidgets, QtGui, QtCore
 
+from hdlg.hdd import HDD
 from hdlg.ui import BaseWindow
 
 
@@ -81,6 +82,7 @@ class MainWorker(QtCore.QObject):
     error = QtCore.Signal(Exception)
     finished = QtCore.Signal(int)
     found_device = QtCore.Signal(wmi._wmi_object)
+    hdd = QtCore.Signal(HDD)
 
     def find_hdds(self) -> None:
         """Find Disk Drive devices using win32 api on Windows, or lsscsi on Linux."""
@@ -97,5 +99,14 @@ class MainWorker(QtCore.QObject):
                 self.finished.emit(len(disk_drives))
             else:
                 raise NotImplementedError("Device Scanning has not been implemented for %s." % system)
+        except Exception as e:
+            self.error.emit(e)
+
+    def load_hdd(self, device: wmi._wmi_object):
+        try:
+            pythoncom.CoInitialize()
+            hdd = HDD(device.DeviceID)
+            self.hdd.emit(hdd)
+            self.finished.emit(0)
         except Exception as e:
             self.error.emit(e)
