@@ -66,7 +66,7 @@ class Main(BaseWindow):
             self.window.statusbar.showMessage("Found %d HDDs" % n)
 
         def on_error(e: Exception):
-            print(e)
+            print("An error occurred somewhere in Main->get_hdd_list():", e)
 
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
