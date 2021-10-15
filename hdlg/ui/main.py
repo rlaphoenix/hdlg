@@ -41,7 +41,11 @@ class Main(BaseWindow):
                     return
 
         button = QtWidgets.QPushButton("\n".join([
-            hdd.target + (" (PS2)" if hdd.is_apa_partitioned else ""),
+            " ".join([
+                size_unit(hdd.disk_size) + ":",
+                hdd.target.upper().replace(r"\\.\PHYSICALDRIVE", "HDD"),
+                ["", "(PS2)"][hdd.is_apa_partitioned]
+            ]),
             hdd.model
         ]))
         button.setObjectName(hdd.target)
@@ -161,7 +165,7 @@ class MainWorker(QtCore.QObject):
         try:
             self.hdd_info.emit([
                 QtWidgets.QTreeWidgetItem(["APA Checksum", hdd.apa_checksum]),
-                QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
+                QtWidgets.QTreeWidgetItem(["Disk Size", f"{hdd.disk_size} ({size_unit(hdd.disk_size)})"])
             ])
             self.finished.emit(0)
         except Exception as e:
