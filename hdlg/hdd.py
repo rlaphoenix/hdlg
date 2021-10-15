@@ -34,6 +34,7 @@ class HDD:
         self.model = model
 
         self._is_apa_partitioned = None
+        self._apa_checksum = None
 
         self.open(target)
 
@@ -133,3 +134,21 @@ class HDD:
             self.seek(old_pos)
 
         return self._is_apa_partitioned
+
+    @property
+    def apa_checksum(self):
+        if not self.is_apa_partitioned:
+            return None
+
+        if self._apa_checksum is not None:
+            return self._apa_checksum
+
+        old_pos = self.seek(0, whence=win32file.FILE_CURRENT)
+
+        try:
+            header = self.read(512)
+            self._apa_checksum = header[0:4]
+        finally:
+            self.seek(old_pos)
+
+        return self._apa_checksum
