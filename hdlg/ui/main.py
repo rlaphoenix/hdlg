@@ -38,13 +38,17 @@ class Main(BaseWindow):
                 if child.objectName() == hdd.target:
                     return
 
-        button = QtWidgets.QPushButton(f"{device.DeviceID}\n{device.Model}")
-        button.setObjectName(device.DeviceID)
+        button = QtWidgets.QPushButton("\n".join([
+            hdd.target + (" (PS2)" if hdd.is_apa_partitioned else ""),
+            hdd.model
+        ]))
+        button.setObjectName(hdd.target)
         button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        button.setEnabled(hdd.is_apa_partitioned)
         button.clicked.connect(lambda: self.load_hdd(hdd))
 
         device_list = self.window.deviceListDevices_2.layout()
-        device_list.insertWidget(0, button)
+        device_list.insertWidget(0 if hdd.is_apa_partitioned else device_list.count() - 1, button)
 
     def get_hdd_list(self) -> None:
         """Finds HDD devices and adds them to the HDD list."""
