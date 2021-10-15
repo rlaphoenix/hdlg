@@ -146,6 +146,8 @@ class HDD:
         old_pos = self.seek(0, whence=win32file.FILE_CURRENT)
 
         try:
+            if self.seek(0) != 0:
+                raise RuntimeError("Unable to seek to start of HDD, cannot get APA checksum...")
             header = self.read(512)
             self._apa_checksum = header[0:4]
         finally:
