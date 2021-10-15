@@ -31,17 +31,17 @@ class Main(BaseWindow):
                 # noinspection PyTypeChecker
                 child.setParent(None)
 
-    def add_hdd_button(self, device: wmi._wmi_object) -> None:
+    def add_hdd_button(self, hdd: HDD) -> None:
         """Add a HDD button into the HDD list. Skips buttons with identical targets."""
         for child in self.window.deviceListDevices_2.children():
             if isinstance(child, QtWidgets.QPushButton):
-                if child.objectName() == device.DeviceID:
+                if child.objectName() == hdd.target:
                     return
 
         button = QtWidgets.QPushButton(f"{device.DeviceID}\n{device.Model}")
         button.setObjectName(device.DeviceID)
         button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        button.clicked.connect(lambda: self.load_hdd(device))
+        button.clicked.connect(lambda: self.load_hdd(hdd))
 
         device_list = self.window.deviceListDevices_2.layout()
         device_list.insertWidget(0, button)
@@ -78,7 +78,7 @@ class Main(BaseWindow):
         self.thread.started.connect(self.worker.find_hdds)
         self.thread.start()
 
-    def load_hdd(self, device: wmi._wmi_object):
+    def load_hdd(self, hdd: HDD):
         """Load HDD device, get HDD object, get device information."""
         self.thread = QtCore.QThread()
         self.worker = MainWorker()
@@ -92,7 +92,7 @@ class Main(BaseWindow):
             self.window.deviceListDevices_2.setEnabled(False)
             self.window.refreshIcon.setEnabled(False)
             self.window.installButton.hide()
-            self.window.statusbar.showMessage(f"Loading HDD %s (%s)" % (device.DeviceID, device.Model))
+            self.window.statusbar.showMessage(f"Loading HDD %s (%s)" % (hdd.target, hdd.model))
 
             if self.window.installButton.isEnabled():
                 self.window.installButton.clicked.disconnect()
@@ -102,7 +102,7 @@ class Main(BaseWindow):
             self.window.refreshIcon.setEnabled(True)
             self.window.installButton.setEnabled(True)
             self.window.installButton.show()
-            self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (device.DeviceID, device.Model))
+            self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (hdd.target, hdd.model))
 
         def on_error(e: Exception):
             print("An error occurred somewhere in Main->load_device():", e)
@@ -132,8 +132,8 @@ class MainWorker(QtCore.QObject):
     # output signals
     error = QtCore.Signal(Exception)
     finished = QtCore.Signal(int)
-    found_device = QtCore.Signal(wmi._wmi_object)
     hdd = QtCore.Signal(HDD)
+    found_device = QtCore.Signal(HDD)
 
     def find_hdds(self) -> None:
         """Find Disk Drive devices using win32 api on Windows, or lsscsi on Linux."""
@@ -146,7 +146,10 @@ class MainWorker(QtCore.QObject):
                 c = wmi.WMI()
                 disk_drives = c.Win32_DiskDrive()
                 for disk_drive in sorted(disk_drives, key=lambda d: d.index, reverse=True):
-                    self.found_device.emit(disk_drive)
+                    self.found_device.emit(HDD(
+                        target=disk_drive.DeviceID,
+                        model=disk_drive.Model
+                    ))
                 self.finished.emit(len(disk_drives))
             else:
                 raise NotImplementedError("Device Scanning has not been implemented for %s." % system)

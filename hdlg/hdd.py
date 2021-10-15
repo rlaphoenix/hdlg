@@ -28,8 +28,10 @@ import winioctlcon
 
 
 class HDD:
-    def __init__(self, target: Union[str, Path]):
+    def __init__(self, target: Union[str, Path], model: str):
         self.handle = win32file.INVALID_HANDLE_VALUE
+        self.target = target
+        self.model = model
 
         self._is_apa_partitioned = None
 
