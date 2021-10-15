@@ -23,6 +23,19 @@ class Main(BaseWindow):
                 # noinspection PyTypeChecker
                 child.setParent(None)
 
+    def add_hdd_button(self, device: wmi._wmi_object) -> None:
+        """Add a HDD button into the HDD list. Skips buttons with identical targets."""
+        for child in self.window.deviceListDevices_2.children():
+            if isinstance(child, QtWidgets.QPushButton):
+                if child.objectName() == device.DeviceID:
+                    return
+
+        button = QtWidgets.QPushButton(f"{device.DeviceID}\n{device.Model}")
+        button.setObjectName(device.DeviceID)
+        button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+        device_list = self.window.deviceListDevices_2.layout()
+        device_list.insertWidget(0, button)
 
 class MainWorker(QtCore.QObject):
     error = QtCore.Signal(Exception)
