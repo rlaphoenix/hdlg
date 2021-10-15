@@ -111,10 +111,10 @@ class Main(BaseWindow):
         def on_error(e: Exception):
             print("An error occurred somewhere in Main->load_device():", e)
 
-        def use_hdd(hdd: HDD):
+        def use_hdd_info(trees: List[QtWidgets.QTreeWidgetItem]):
             self.window.hddInfoList.clear()
-            geometry = QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
-            self.window.hddInfoList.addTopLevelItem(geometry)
+            for tree in trees:
+                self.window.hddInfoList.addTopLevelItem(tree)
 
             self.window.hddInfoList.expandToDepth(0)
             self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
@@ -122,22 +122,17 @@ class Main(BaseWindow):
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
         self.worker.error.connect(on_error)
-        self.worker.hdd.connect(use_hdd)
+        self.worker.hdd_info.connect(use_hdd_info)
 
-        self.worker.device.connect(self.worker.load_hdd)
-        self.thread.started.connect(lambda: self.worker.device.emit(device))
+        self.thread.started.connect(lambda: self.worker.get_hdd_info(hdd))
         self.thread.start()
 
 
 class MainWorker(QtCore.QObject):
-    # input signals
-    device = QtCore.Signal(wmi._wmi_object)
-
-    # output signals
     error = QtCore.Signal(Exception)
     finished = QtCore.Signal(int)
-    hdd = QtCore.Signal(HDD)
     found_device = QtCore.Signal(HDD)
+    hdd_info = QtCore.Signal(list)
 
     def find_hdds(self) -> None:
         """Find Disk Drive devices using win32 api on Windows, or lsscsi on Linux."""
@@ -160,11 +155,10 @@ class MainWorker(QtCore.QObject):
         except Exception as e:
             self.error.emit(e)
 
-    def load_hdd(self, device: wmi._wmi_object):
+    def get_hdd_info(self, hdd: HDD) -> None:
         try:
-            pythoncom.CoInitialize()
-            hdd = HDD(device.DeviceID)
-            self.hdd.emit(hdd)
-            self.finished.emit(0)
+            self.hdd_info.emit([
+                QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
+            ])
         except Exception as e:
             self.error.emit(e)
