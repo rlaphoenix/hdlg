@@ -117,6 +117,8 @@ class HDD:
         old_pos = self.seek(0, whence=win32file.FILE_CURRENT)
 
         try:
+            if self.seek(0) != 0:
+                raise RuntimeError("Unable to seek to start of HDD, cannot check if APA Partitioned...")
             header = self.read(1024)
             checksum = header[0:4]
             magic = header[4:8]
