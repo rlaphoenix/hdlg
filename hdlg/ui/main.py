@@ -16,6 +16,8 @@ class Main(BaseWindow):
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
 
+        self.get_hdd_list()
+
     def clear_hdd_list(self) -> None:
         """Clear all buttons from the HDD list."""
         for child in self.window.deviceListDevices_2.children():
