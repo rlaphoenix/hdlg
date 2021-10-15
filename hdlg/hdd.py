@@ -33,6 +33,7 @@ class HDD:
         self.target = target
         self.model = model
 
+        self._geometry = None
         self._is_apa_partitioned = None
         self._apa_checksum = None
 
@@ -85,7 +86,8 @@ class HDD:
             raise IOError(f"Read {size - len(data)} less bytes than requested...")
         return data
 
-    def get_geometry(self) -> tuple[int, ...]:
+    @property
+    def geometry(self) -> tuple[int, ...]:
         """
         Retrieves information about the physical disk's geometry.
         https://docs.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-disk_geometry_ex
@@ -100,14 +102,19 @@ class HDD:
             Disk Size
             Extra Data
         """
+        if self._geometry is not None:
+            return self._geometry
+
         if self.handle == win32file.INVALID_HANDLE_VALUE:
             raise ValueError("Handle is invalid, have you opened a handle yet?")
-        return struct.unpack("8L", win32file.DeviceIoControl(
+
+        self._geometry = struct.unpack("8L", win32file.DeviceIoControl(
             self.handle,  # handle
             winioctlcon.IOCTL_DISK_GET_DRIVE_GEOMETRY_EX,  # ioctl api
-            b"",  # in buffer
+            None,  # in buffer
             32  # out buffer
         ))
+        return self._geometry
 
     @property
     def is_apa_partitioned(self) -> bool:
