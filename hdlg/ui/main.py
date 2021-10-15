@@ -15,6 +15,7 @@ class Main(BaseWindow):
 
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
+        self.window.refreshIcon.clicked.connect(self.get_hdd_list)
 
         self.get_hdd_list()
 
