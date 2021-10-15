@@ -31,6 +31,8 @@ class HDD:
     def __init__(self, target: Union[str, Path]):
         self.handle = win32file.INVALID_HANDLE_VALUE
 
+        self._is_apa_partitioned = None
+
         self.open(target)
 
     def __enter__(self):
@@ -104,8 +106,12 @@ class HDD:
             32  # out buffer
         ))
 
+    @property
     def is_apa_partitioned(self) -> bool:
         """Check if HDD is a PS2 APA-formatted device."""
+        if self._is_apa_partitioned is not None:
+            return self._is_apa_partitioned
+
         header = self.read(1024)
         checksum = header[0:4]
         magic = header[4:8]
@@ -115,4 +121,5 @@ class HDD:
             sum(struct.unpack("<I", header[n:n+4])[0] for n in range(4, 1024, 4))
         )[:4]
 
-        return magic == b"APA\0" and checksum == new_checksum
+        self._is_apa_partitioned = magic == b"APA\0" and checksum == new_checksum
+        return self._is_apa_partitioned
