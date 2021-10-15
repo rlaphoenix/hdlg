@@ -58,6 +58,7 @@ class Main(BaseWindow):
 
         def manage_state():
             self.window.refreshIcon.setEnabled(False)
+            self.window.installButton.hide()
             self.window.statusbar.showMessage("Scanning HDDs...")
 
         def on_finish(n: int):
