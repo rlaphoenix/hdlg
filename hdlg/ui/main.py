@@ -12,6 +12,10 @@ class Main(BaseWindow):
         super().__init__(name=self.__class__.__name__)
 
         self.window.setMinimumSize(1000, 400)
+        self.clear_hdd_list()  # clear example HDD buttons
+        self.window.installButton.setEnabled(False)
+        self.window.installButton.hide()
+        self.window.progressBar.hide()
 
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
