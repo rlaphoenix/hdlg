@@ -34,6 +34,7 @@ class HDD:
         self.model = model
 
         self._geometry = None
+        self._disk_size = None
         self._is_apa_partitioned = None
         self._apa_checksum = None
 
@@ -115,6 +116,17 @@ class HDD:
             32  # out buffer
         ))
         return self._geometry
+
+    @property
+    def disk_size(self) -> int:
+        """Get full Disk Size (in bytes)."""
+        if self._disk_size is not None:
+            return self._disk_size
+
+        cyl_lo, cyl_hi, _, tpc, spt, bps, _, _ = self.geometry
+
+        self._disk_size = (cyl_lo + cyl_hi) * tpc * spt * bps
+        return self._disk_size
 
     @property
     def is_apa_partitioned(self) -> bool:

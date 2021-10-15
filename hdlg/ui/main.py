@@ -7,6 +7,7 @@ from PySide2 import QtWidgets, QtGui, QtCore
 
 from hdlg.hdd import HDD
 from hdlg.ui import BaseWindow
+from hdlg.utils import size_unit
 
 
 class Main(BaseWindow):
