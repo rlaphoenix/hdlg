@@ -103,3 +103,16 @@ class HDD:
             b"",  # in buffer
             32  # out buffer
         ))
+
+    def is_apa_partitioned(self) -> bool:
+        """Check if HDD is a PS2 APA-formatted device."""
+        header = self.read(1024)
+        checksum = header[0:4]
+        magic = header[4:8]
+
+        new_checksum = struct.pack(
+            "<Q",
+            sum(struct.unpack("<I", header[n:n+4])[0] for n in range(4, 1024, 4))
+        )[:4]
+
+        return magic == b"APA\0" and checksum == new_checksum
