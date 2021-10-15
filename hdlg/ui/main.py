@@ -164,5 +164,6 @@ class MainWorker(QtCore.QObject):
                 QtWidgets.QTreeWidgetItem(["APA Checksum", apa_checksum]),
                 QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
             ])
+            self.finished.emit(0)
         except Exception as e:
             self.error.emit(e)
