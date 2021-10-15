@@ -41,6 +41,7 @@ class Main(BaseWindow):
         button = QtWidgets.QPushButton(f"{device.DeviceID}\n{device.Model}")
         button.setObjectName(device.DeviceID)
         button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        button.clicked.connect(lambda: self.load_hdd(device))
 
         device_list = self.window.deviceListDevices_2.layout()
         device_list.insertWidget(0, button)
@@ -77,8 +78,58 @@ class Main(BaseWindow):
         self.thread.started.connect(self.worker.find_hdds)
         self.thread.start()
 
+    def load_hdd(self, device: wmi._wmi_object):
+        """Load HDD device, get HDD object, get device information."""
+        self.thread = QtCore.QThread()
+        self.worker = MainWorker()
+        self.worker.moveToThread(self.thread)
+
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        def manage_state():
+            self.window.deviceListDevices_2.setEnabled(False)
+            self.window.refreshIcon.setEnabled(False)
+            self.window.installButton.hide()
+            self.window.statusbar.showMessage(f"Loading HDD %s (%s)" % (device.DeviceID, device.Model))
+
+            if self.window.installButton.isEnabled():
+                self.window.installButton.clicked.disconnect()
+
+        def on_finish(_: int):
+            self.window.deviceListDevices_2.setEnabled(True)
+            self.window.refreshIcon.setEnabled(True)
+            self.window.installButton.setEnabled(True)
+            self.window.installButton.show()
+            self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (device.DeviceID, device.Model))
+
+        def on_error(e: Exception):
+            print("An error occurred somewhere in Main->load_device():", e)
+
+        def use_hdd(hdd: HDD):
+            self.window.hddInfoList.clear()
+            geometry = QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
+            self.window.hddInfoList.addTopLevelItem(geometry)
+
+            self.window.hddInfoList.expandToDepth(0)
+            self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+
+        self.thread.started.connect(manage_state)
+        self.worker.finished.connect(on_finish)
+        self.worker.error.connect(on_error)
+        self.worker.hdd.connect(use_hdd)
+
+        self.worker.device.connect(self.worker.load_hdd)
+        self.thread.started.connect(lambda: self.worker.device.emit(device))
+        self.thread.start()
+
 
 class MainWorker(QtCore.QObject):
+    # input signals
+    device = QtCore.Signal(wmi._wmi_object)
+
+    # output signals
     error = QtCore.Signal(Exception)
     finished = QtCore.Signal(int)
     found_device = QtCore.Signal(wmi._wmi_object)
