@@ -24,6 +24,7 @@ python = ">=3.6,<3.10"
 PySide2 = "^5.15.2"
 appdirs = "^1.4.4"
 toml = "^0.10.2"
+WMI = {version = "^1.5.1", platform = "win32"}
 
 [tool.poetry.dev-dependencies]
 pyinstaller = "^4.5.1"
