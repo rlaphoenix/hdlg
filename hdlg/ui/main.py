@@ -16,6 +16,13 @@ class Main(BaseWindow):
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
 
+    def clear_hdd_list(self) -> None:
+        """Clear all buttons from the HDD list."""
+        for child in self.window.deviceListDevices_2.children():
+            if isinstance(child, QtWidgets.QPushButton):
+                # noinspection PyTypeChecker
+                child.setParent(None)
+
 
 class MainWorker(QtCore.QObject):
     error = QtCore.Signal(Exception)
