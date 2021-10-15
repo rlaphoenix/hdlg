@@ -1,4 +1,5 @@
 import platform
+from typing import List
 
 import pythoncom
 import wmi
@@ -157,7 +158,10 @@ class MainWorker(QtCore.QObject):
 
     def get_hdd_info(self, hdd: HDD) -> None:
         try:
+            hdd.seek(0)
+            apa_checksum = str(hdd.read(512)[0:4])
             self.hdd_info.emit([
+                QtWidgets.QTreeWidgetItem(["APA Checksum", apa_checksum]),
                 QtWidgets.QTreeWidgetItem(["Geometry", str(hdd.get_geometry())])
             ])
         except Exception as e:
