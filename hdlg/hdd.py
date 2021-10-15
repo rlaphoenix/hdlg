@@ -112,14 +112,20 @@ class HDD:
         if self._is_apa_partitioned is not None:
             return self._is_apa_partitioned
 
-        header = self.read(1024)
-        checksum = header[0:4]
-        magic = header[4:8]
+        old_pos = self.seek(0, whence=win32file.FILE_CURRENT)
 
-        new_checksum = struct.pack(
-            "<Q",
-            sum(struct.unpack("<I", header[n:n+4])[0] for n in range(4, 1024, 4))
-        )[:4]
+        try:
+            header = self.read(1024)
+            checksum = header[0:4]
+            magic = header[4:8]
 
-        self._is_apa_partitioned = magic == b"APA\0" and checksum == new_checksum
+            new_checksum = struct.pack(
+                "<Q",
+                sum(struct.unpack("<I", header[n:n+4])[0] for n in range(4, 1024, 4))
+            )[:4]
+
+            self._is_apa_partitioned = magic == b"APA\0" and checksum == new_checksum
+        finally:
+            self.seek(old_pos)
+
         return self._is_apa_partitioned
