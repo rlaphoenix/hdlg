@@ -26,6 +26,7 @@ appdirs = "^1.4.4"
 toml = "^0.10.2"
 pywin32 = {version = "302", platform = "win32"}
 WMI = {version = "^1.5.1", platform = "win32"}
+pycdlib = { git = "https://github.com/rlaphoenix/pycdlib.git", branch = "new-win" }
 
 [tool.poetry.dev-dependencies]
 pyinstaller = "^4.5.1"
