@@ -1,3 +1,9 @@
+import platform
+
+import pythoncom
+import wmi
+from PySide2 import QtWidgets, QtGui, QtCore
+
 from hdlg.ui import BaseWindow
 
 
