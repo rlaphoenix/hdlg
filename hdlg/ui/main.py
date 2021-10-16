@@ -169,7 +169,7 @@ class MainWorker(QtCore.QObject):
             games_tree = QtWidgets.QTreeWidgetItem(["Games", str(len(games))])
             for media_type, size, _, dma, game_id, name in games:
                 games_tree.addChild(QtWidgets.QTreeWidgetItem([
-                    f"{media_type} {size} ({dma})",
+                    f"{media_type} {size_unit(size)} ({dma})",
                     f"{game_id} {name}"
                 ]))
 

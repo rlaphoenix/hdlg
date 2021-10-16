@@ -179,13 +179,13 @@ class HDD:
 
         return self._apa_checksum
 
-    def get_games_list(self) -> list[tuple[str, ...]]:
+    def get_games_list(self) -> list[tuple[str, int, int, str, str, str]]:
         """
         Get a list of games installed on the HDD (if any).
 
         Returns a tuple of:
             MediaType
-            SizeKB
+            Size (in Bytes)
             Flags
             DMA
             GameID
@@ -199,7 +199,11 @@ class HDD:
         ])
         games = hdl_toc.decode().splitlines(keepends=False)[1:-1]
         games = [
-            tuple(NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5))
+            NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5)
             for game in games
+        ]
+        games = [
+            (media_type, int(size.replace("KB", "")) * 1000, int(flags), dma, game_id, game_name)
+            for media_type, size, flags, dma, game_id, game_name in games
         ]
         return games
