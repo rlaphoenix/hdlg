@@ -16,7 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from __future__ import annotations
+
 import struct
+import subprocess
 import sys
 from ctypes.wintypes import HANDLE
 from pathlib import Path
@@ -25,6 +28,8 @@ from typing import Union
 import win32con
 import win32file
 import winioctlcon
+
+from hdlg.utils import NEIGHBORING_WHITESPACE
 
 
 class HDD:
@@ -173,3 +178,28 @@ class HDD:
             self.seek(old_pos)
 
         return self._apa_checksum
+
+    def get_games_list(self) -> list[tuple[str, ...]]:
+        """
+        Get a list of games installed on the HDD (if any).
+
+        Returns a tuple of:
+            MediaType
+            SizeKB
+            Flags
+            DMA
+            GameID
+            GameName
+        """
+        # TODO: Add handler for when there's no games installed
+        hdl_toc = subprocess.check_output([
+            "hdl_dump.exe",
+            "hdl_toc",
+            self.target.upper().replace(r"\\.\PHYSICALDRIVE", "hdd") + ":"
+        ])
+        games = hdl_toc.decode().splitlines(keepends=False)[1:-1]
+        games = [
+            tuple(NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5))
+            for game in games
+        ]
+        return games
