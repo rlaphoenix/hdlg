@@ -164,8 +164,18 @@ class MainWorker(QtCore.QObject):
 
     def get_hdd_info(self, hdd: HDD) -> None:
         try:
+            games = hdd.get_games_list()
+
+            games_tree = QtWidgets.QTreeWidgetItem(["Games", str(len(games))])
+            for media_type, size, _, dma, game_id, name in games:
+                games_tree.addChild(QtWidgets.QTreeWidgetItem([
+                    f"{media_type} {size} ({dma})",
+                    f"{game_id} {name}"
+                ]))
+
             self.hdd_info.emit([
-                QtWidgets.QTreeWidgetItem(["Disk Size", f"{size_unit(hdd.disk_size)} ({hdd.disk_size})"])
+                QtWidgets.QTreeWidgetItem(["Disk Size", f"{size_unit(hdd.disk_size)} ({hdd.disk_size})"]),
+                games_tree
             ])
             self.finished.emit(0)
         except Exception as e:
