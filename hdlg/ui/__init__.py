@@ -9,7 +9,7 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QMessageBox
 
 from hdlg.config import Directories
-from hdlg.utils import camel_to_snake
+from hdlg.utils import camel_to_snake, is_frozen
 
 
 class BaseWindow:
@@ -40,7 +40,7 @@ class BaseWindow:
                     sys.platform,
                     "%dbit" % (8 * struct.calcsize("P")),
                     platform.python_version(),
-                    "frozen" if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS") else None
+                    "frozen" if is_frozen() else None
                 ])))
             )) +
             f"<p>Copyright (C) {datetime.now().year} PHOENiX</p>" +
