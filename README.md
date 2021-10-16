@@ -26,14 +26,14 @@ If you wish to manually install from the source, take a look at [Building](#buil
 ## To-do
 
 - [x] Craft initial GUI with Qt.
+- [x] Push to PyPI and add relevant Badges.
+- [x] Add PyInstaller make file.
+- [x] Add local PS2 HDD connection option.
+- [x] List installed games of selected HDD.
+- [ ] Show HDD information like Disk Size, Space Used, and such.
+- [ ] Add ability to install a new game to selected HDD.
 - [ ] Create a file based settings system.
-- [ ] Add local PS2 HDD connection option.
 - [ ] Add remote PS2 HDD (samba) connection option.
-- [ ] List installed games of selected HDD.
-- [ ] Add button to install a new game to selected HDD.
-- [ ] Add PyInstaller support (PyInstaller spec file).
-- [ ] Add information about a PS2 HDD like size, space used, games installed, count games by game type (PS2 DVD/CD, PS1), etc.
-- [ ] Push to PyPI and add relevant Badges.
 
 ## Building
 
