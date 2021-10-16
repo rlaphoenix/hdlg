@@ -144,7 +144,7 @@ class MainWorker(QtCore.QObject):
     def find_hdds(self) -> None:
         """Find Disk Drive devices using win32 api on Windows, or lsscsi on Linux."""
         try:
-            # TODO: Filter only PS2 APA-formatted HDDs, Support Linux and macOS
+            # TODO: Support Linux and macOS
             system = platform.system()
             if system == "Windows":
                 # noinspection PyUnresolvedReferences
