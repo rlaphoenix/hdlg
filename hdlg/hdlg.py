@@ -24,9 +24,12 @@ from PySide2.QtWidgets import QApplication
 
 from hdlg.config import Directories
 from hdlg.ui.main import Main
+from hdlg.utils import require_admin
 
 
 def main():
+    require_admin()
+
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
