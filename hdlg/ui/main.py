@@ -60,8 +60,6 @@ class Main(BaseWindow):
 
     def get_hdd_list(self) -> None:
         """Finds HDD devices and adds them to the HDD list."""
-        self.clear_hdd_list()
-
         self.thread = QtCore.QThread()
         self.worker = MainWorker()
         self.worker.moveToThread(self.thread)
@@ -73,6 +71,7 @@ class Main(BaseWindow):
         def manage_state():
             self.window.refreshIcon.setEnabled(False)
             self.window.installButton.hide()
+            self.clear_hdd_list()
             self.window.statusbar.showMessage("Scanning HDDs...")
 
         def on_finish(n: int):
