@@ -165,7 +165,7 @@ class MainWorker(QtCore.QObject):
     def get_hdd_info(self, hdd: HDD) -> None:
         try:
             self.hdd_info.emit([
-                QtWidgets.QTreeWidgetItem(["Disk Size", f"{hdd.disk_size} ({size_unit(hdd.disk_size)})"])
+                QtWidgets.QTreeWidgetItem(["Disk Size", f"{size_unit(hdd.disk_size)} ({hdd.disk_size})"])
             ])
             self.finished.emit(0)
         except Exception as e:
