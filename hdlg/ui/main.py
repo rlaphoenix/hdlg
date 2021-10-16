@@ -20,6 +20,7 @@ class Main(BaseWindow):
         self.window.installButton.setEnabled(False)
         self.window.installButton.hide()
         self.window.progressBar.hide()
+        self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
@@ -124,7 +125,6 @@ class Main(BaseWindow):
                 self.window.hddInfoList.addTopLevelItem(tree)
 
             self.window.hddInfoList.expandToDepth(0)
-            self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
