@@ -1,5 +1,6 @@
 import re
 
+NEIGHBORING_WHITESPACE = re.compile(r"[\s]{2,}")
 CAMEL_TO_SNAKE_1 = re.compile(r"(.)([A-Z][a-z]+)")
 CAMEL_TO_SNAKE_2 = re.compile(r"([a-z0-9])([A-Z])")
 SIZE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"]
