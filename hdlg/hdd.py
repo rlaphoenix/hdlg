@@ -206,4 +206,5 @@ class HDD:
             (media_type, int(size.replace("KB", "")) * 1000, int(flags), dma, game_id, game_name)
             for media_type, size, flags, dma, game_id, game_name in games
         ]
+        games.sort(key=lambda x: x[-1])
         return games
