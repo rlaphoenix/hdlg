@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import platform
-from typing import List
 
 import pythoncom
 import wmi
@@ -117,7 +118,7 @@ class Main(BaseWindow):
         def on_error(e: Exception):
             print("An error occurred somewhere in Main->load_device():", e)
 
-        def use_hdd_info(trees: List[QtWidgets.QTreeWidgetItem]):
+        def use_hdd_info(trees: list[QtWidgets.QTreeWidgetItem]):
             self.window.hddInfoList.clear()
             for tree in trees:
                 self.window.hddInfoList.addTopLevelItem(tree)
