@@ -62,21 +62,6 @@ python-versions = ">=3.6.0"
 future = "*"
 
 [[package]]
-name = "pycdlib"
-version = "1.12.0"
-description = "Pure python ISO manipulation library"
-category = "main"
-optional = false
-python-versions = "*"
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/rlaphoenix/pycdlib.git"
-reference = "new-win"
-resolved_reference = "dda446ea753099c5cb601ed76bb2421f6fcd8f07"
-
-[[package]]
 name = "pyinstaller"
 version = "4.5.1"
 description = "PyInstaller bundles a Python application and all its dependencies into a single package."
@@ -188,7 +173,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6,<3.10"
-content-hash = "13fd63c2c1a77eb5d2cbe010bc2016fa0822d2405caa854e302ca356f9db9401"
+content-hash = "0e586bad96e59baf910523f3215bd2f401bc203eb9136c87bf1ac704e43dafb5"
 
 [metadata.files]
 altgraph = [
@@ -213,7 +198,6 @@ macholib = [
 pefile = [
     {file = "pefile-2021.9.3.tar.gz", hash = "sha256:344a49e40a94e10849f0fe34dddc80f773a12b40675bf2f7be4b8be578bdd94a"},
 ]
-pycdlib = []
 pyinstaller = [
     {file = "pyinstaller-4.5.1-py3-none-macosx_10_13_universal2.whl", hash = "sha256:ecc2baadeeefd2b6fbf39d13c65d4aa603afdda1c6aaaebc4577ba72893fee9e"},
     {file = "pyinstaller-4.5.1-py3-none-manylinux2014_aarch64.whl", hash = "sha256:4d848cd782ee0893d7ad9fe2bfe535206a79f0b6760cecc5f2add831258b9322"},
