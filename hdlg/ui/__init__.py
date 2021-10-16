@@ -35,7 +35,7 @@ class BaseWindow:
         QMessageBox.about(
             self.window,
             "About HDLG",
-            ("HDLG v0.0.1 [%s]" % (
+            ("HDLG v0.1.0 [%s]" % (
                 ",".join(map(str, filter(None, [
                     sys.platform,
                     "%dbit" % (8 * struct.calcsize("P")),
