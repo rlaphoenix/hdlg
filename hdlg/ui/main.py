@@ -70,12 +70,25 @@ class Main(BaseWindow):
         def manage_state():
             self.window.refreshIcon.setEnabled(False)
             self.window.installButton.hide()
+            self.window.hddInfoList.clear()
+            self.window.hddInfoList.setEnabled(False)
             self.clear_hdd_list()
             self.window.statusbar.showMessage("Scanning HDDs...")
 
+            self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
+                "\n" * 8 + " " * 90 +
+                "Scanning for PS2 HDDs..."
+            ]))
+
         def on_finish(n: int):
             self.window.refreshIcon.setEnabled(True)
+            self.window.hddInfoList.clear()
             self.window.statusbar.showMessage("Found %d HDDs" % n)
+
+            self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
+                "\n" * 8 + " " * 60 +
+                "Ready to go? Just choose a PS2 HDD to get started!"
+            ]))
 
         def on_error(e: Exception):
             print("An error occurred somewhere in Main->get_hdd_list():", e)
@@ -102,6 +115,7 @@ class Main(BaseWindow):
             self.window.deviceListDevices_2.setEnabled(False)
             self.window.refreshIcon.setEnabled(False)
             self.window.installButton.hide()
+            self.window.hddInfoList.clear()
             self.window.statusbar.showMessage(f"Loading HDD %s (%s)" % (hdd.target, hdd.model))
 
             if self.window.installButton.isEnabled():
@@ -112,6 +126,7 @@ class Main(BaseWindow):
             self.window.refreshIcon.setEnabled(True)
             self.window.installButton.setEnabled(True)
             self.window.installButton.show()
+            self.window.hddInfoList.setEnabled(True)
             self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (hdd.target, hdd.model))
 
         def on_error(e: Exception):
