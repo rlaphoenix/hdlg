@@ -1,5 +1,6 @@
 import ctypes
 import re
+import subprocess
 import sys
 
 NEIGHBORING_WHITESPACE = re.compile(r"[\s]{2,}")
@@ -70,3 +71,9 @@ def size_unit(size, base=1000):
         i += 1
     f = ("%.2f" % size).rstrip("0").rstrip(".")
     return "%s %s" % (f, SIZE_UNITS[i])
+
+
+def hdl_dump(*args) -> list[str]:
+    """Make a call to hdl-dump and return the string output."""
+    res = subprocess.check_output(["hdl_dump", *args])
+    return res.decode().splitlines()
