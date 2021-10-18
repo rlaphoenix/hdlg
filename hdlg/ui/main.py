@@ -165,7 +165,7 @@ class MainWorker(QtCore.QObject):
                 pythoncom.CoInitialize()  # important!
                 c = wmi.WMI()
                 disk_drives = c.Win32_DiskDrive()
-                for disk_drive in sorted(disk_drives, key=lambda d: d.index, reverse=True):
+                for disk_drive in sorted(disk_drives, key=lambda d: d.index):
                     self.found_device.emit(HDD(
                         target=disk_drive.DeviceID,
                         model=disk_drive.Model
