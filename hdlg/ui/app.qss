@@ -5,13 +5,13 @@
 
 QPushButton {
 	border: none;
-	background-color: rgb(109, 109, 109);
+	background-color: rgb(78, 78, 78);
 	border-radius: 2px;
 	padding: 4px 8px;
 	text-align: left;
 }
 QPushButton:hover:!pressed {
-  background-color: rgb(139, 139, 139);
+  background-color: rgb(58, 58, 58);
 }
 QPushButton:disabled {
   color: #404040;
