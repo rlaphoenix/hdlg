@@ -42,6 +42,7 @@ class HDD:
 
         self._geometry = None
         self._disk_size = None
+        self._disk_map = None
         self._is_apa_partitioned = None
         self._apa_checksum = None
 
@@ -134,6 +135,22 @@ class HDD:
 
         self._disk_size = (cyl_lo + cyl_hi) * tpc * spt * bps
         return self._disk_size
+
+    @property
+    def disk_map(self) -> tuple[int, ...]:
+        """Get Total Slice Size, Used Space, and Available Space (in bytes)."""
+        if self._disk_map is not None:
+            return self._disk_map
+
+        disk_map = hdl_dump("map", self.hdl_target)[-1]
+        total, used, available = [
+            int(x.split(": ")[1][:-2]) * 1000 * 1000
+            for x in disk_map.split(", ")
+        ]
+
+        self._disk_map = (total, used, available)
+
+        return self._disk_map
 
     @property
     def is_apa_partitioned(self) -> bool:
