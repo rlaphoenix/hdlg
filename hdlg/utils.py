@@ -1,8 +1,10 @@
 import ctypes
 import re
+import shutil
 import subprocess
 import sys
 
+HDL_DUMP_BIN = shutil.which("hdl-dump") or shutil.which("hdl_dump")
 NEIGHBORING_WHITESPACE = re.compile(r"[\s]{2,}")
 CAMEL_TO_SNAKE_1 = re.compile(r"(.)([A-Z][a-z]+)")
 CAMEL_TO_SNAKE_2 = re.compile(r"([a-z0-9])([A-Z])")
@@ -75,5 +77,5 @@ def size_unit(size, base=1000):
 
 def hdl_dump(*args) -> list[str]:
     """Make a call to hdl-dump and return the string output."""
-    res = subprocess.check_output(["hdl_dump", *args])
+    res = subprocess.check_output([HDL_DUMP_BIN, *args])
     return res.decode().splitlines()
