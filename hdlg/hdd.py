@@ -194,10 +194,7 @@ class HDD:
             GameName
         """
         # TODO: Add handler for when there's no games installed
-        games = hdl_dump(
-            "hdl_toc",
-            self.target.upper().replace(r"\\.\PHYSICALDRIVE", "hdd") + ":"
-        )[1:-1]
+        games = hdl_dump("hdl_toc", self.hdl_target)[1:-1]
         games = [
             NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5)
             for game in games
