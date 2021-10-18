@@ -43,9 +43,8 @@ class Main(BaseWindow):
 
         button = QtWidgets.QPushButton("\n".join([
             " ".join([
-                size_unit(hdd.disk_size) + ":",
-                hdd.target.upper().replace(r"\\.\PHYSICALDRIVE", "HDD"),
-                ["", "(PS2)"][hdd.is_apa_partitioned]
+                hdd.hdl_target,
+                f"({size_unit(hdd.disk_size)}" + [")", ", PS2)"][hdd.is_apa_partitioned]
             ]),
             hdd.model
         ]))
