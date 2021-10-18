@@ -91,7 +91,8 @@ class Main(BaseWindow):
             ]))
 
         def on_error(e: Exception):
-            print("An error occurred somewhere in Main->get_hdd_list():", e)
+            print("An error occurred somewhere in Main->get_hdd_list():")
+            raise e
 
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
@@ -130,7 +131,8 @@ class Main(BaseWindow):
             self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (hdd.target, hdd.model))
 
         def on_error(e: Exception):
-            print("An error occurred somewhere in Main->load_device():", e)
+            print("An error occurred somewhere in Main->load_device():")
+            raise e
 
         def use_hdd_info(trees: list[QtWidgets.QTreeWidgetItem]):
             self.window.hddInfoList.clear()
