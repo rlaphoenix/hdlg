@@ -178,8 +178,22 @@ class MainWorker(QtCore.QObject):
 
     def get_hdd_info(self, hdd: HDD) -> None:
         try:
-            games = hdd.get_games_list()
+            disk_usage_percent = [
+                (hdd.disk_map[1] / hdd.disk_map[0]) * 100,  # Used
+                (hdd.disk_map[2] / hdd.disk_map[0]) * 100,  # Available
+            ]
+            space_tree = QtWidgets.QTreeWidgetItem(["Disk Space"])
+            space_tree.addChild(QtWidgets.QTreeWidgetItem([
+                "Total", f"{size_unit(hdd.disk_size)} ({hdd.disk_size})"
+            ]))
+            space_tree.addChild(QtWidgets.QTreeWidgetItem([
+                "Used", f"{size_unit(hdd.disk_map[1])} ({hdd.disk_map[1]}, {disk_usage_percent[0]:.2f}%)"
+            ]))
+            space_tree.addChild(QtWidgets.QTreeWidgetItem([
+                "Available", f"{size_unit(hdd.disk_map[2])} ({hdd.disk_map[2]}, {disk_usage_percent[1]:.2f}%)"
+            ]))
 
+            games = hdd.get_games_list()
             games_tree = QtWidgets.QTreeWidgetItem(["Games", str(len(games))])
             for media_type, size, _, dma, game_id, name in games:
                 games_tree.addChild(QtWidgets.QTreeWidgetItem([
@@ -188,7 +202,7 @@ class MainWorker(QtCore.QObject):
                 ]))
 
             self.hdd_info.emit([
-                QtWidgets.QTreeWidgetItem(["Disk Size", f"{size_unit(hdd.disk_size)} ({hdd.disk_size})"]),
+                space_tree,
                 games_tree
             ])
             self.finished.emit(0)
