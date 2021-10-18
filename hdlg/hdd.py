@@ -35,6 +35,9 @@ class HDD:
     def __init__(self, target: Union[str, Path], model: str):
         self.handle = win32file.INVALID_HANDLE_VALUE
         self.target = target
+        self.hdl_target = {
+            "win32": target.upper().replace(r"\\.\PHYSICALDRIVE", "hdd") + ":"
+        }.get(sys.platform, target)
         self.model = model
 
         self._geometry = None
