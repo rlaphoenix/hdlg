@@ -51,7 +51,9 @@ class Main(BaseWindow):
         button.setObjectName(hdd.target)
         button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         button.setEnabled(hdd.is_apa_partitioned)
+        button.setCheckable(hdd.is_apa_partitioned)
         button.clicked.connect(lambda: self.load_hdd(hdd))
+        button.toggled.connect(lambda: button.setChecked(True))
 
         device_list = self.window.deviceListDevices_2.layout()
         device_list.insertWidget(0 if hdd.is_apa_partitioned else device_list.count() - 1, button)

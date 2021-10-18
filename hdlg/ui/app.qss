@@ -17,6 +17,9 @@ QPushButton:disabled {
   color: #404040;
   background-color: rgb(39, 39, 39);
 }
+QPushButton:checked {
+  border-left: 2px solid rgb(0, 105, 192);
+}
 
 QPushButton#installButton {
 	background-color: rgb(0, 105, 192);
