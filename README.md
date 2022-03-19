@@ -8,7 +8,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/issues)
 ![Build](https://github.com/rlaphoenix/hdlg/workflows/Build/badge.svg?branch=master)
 
-HDLG is a modern cross-platform GUI for hdl-dump with Batch installation capabilities.
+HDLG is a modern GUI for hdl-dump with Batch installation capabilities.
 
 ## Looking for Artwork
 

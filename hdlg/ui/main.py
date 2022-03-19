@@ -1,13 +1,7 @@
 from __future__ import annotations
 
-import platform
-
-if platform.system() == "Windows":
-    import pythoncom
-    import wmi
-else:
-    pythoncom = None
-    wmi = None
+import pythoncom
+import wmi
 
 from PySide2 import QtWidgets, QtGui, QtCore
 
@@ -163,23 +157,18 @@ class MainWorker(QtCore.QObject):
     hdd_info = QtCore.Signal(list)
 
     def find_hdds(self) -> None:
-        """Find Disk Drive devices using win32 api on Windows, or lsscsi on Linux."""
+        """Find Disk Drive devices using WMI on Windows."""
         try:
-            # TODO: Support Linux and macOS
-            system = platform.system()
-            if system == "Windows":
-                # noinspection PyUnresolvedReferences
-                pythoncom.CoInitialize()  # important!
-                c = wmi.WMI()
-                disk_drives = c.Win32_DiskDrive()
-                for disk_drive in sorted(disk_drives, key=lambda d: d.index):
-                    self.found_device.emit(HDD(
-                        target=disk_drive.DeviceID,
-                        model=disk_drive.Model
-                    ))
-                self.finished.emit(len(disk_drives))
-            else:
-                raise NotImplementedError("Device Scanning has not been implemented for %s." % system)
+            # noinspection PyUnresolvedReferences
+            pythoncom.CoInitialize()  # important!
+            c = wmi.WMI()
+            disk_drives = c.Win32_DiskDrive()
+            for disk_drive in sorted(disk_drives, key=lambda d: d.index):
+                self.found_device.emit(HDD(
+                    target=disk_drive.DeviceID,
+                    model=disk_drive.Model
+                ))
+            self.finished.emit(len(disk_drives))
         except Exception as e:
             self.error.emit(e)
 

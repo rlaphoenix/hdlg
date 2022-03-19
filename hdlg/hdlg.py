@@ -1,6 +1,6 @@
 """
-hdlg - Modern cross-platform GUI for hdl-dump.
-Copyright (C) 2021 rlaphoenix
+hdlg - Modern GUI for hdl-dump.
+Copyright (C) 2021-2022 rlaphoenix
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

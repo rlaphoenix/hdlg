@@ -1,6 +1,6 @@
 """
-hdlg - Modern cross-platform GUI for hdl-dump.
-Copyright (C) 2021 rlaphoenix
+hdlg - Modern GUI for hdl-dump.
+Copyright (C) 2021-2022 rlaphoenix
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import struct
-import sys
 from ctypes.wintypes import HANDLE
 from pathlib import Path
 from typing import Union
@@ -35,9 +34,7 @@ class HDD:
     def __init__(self, target: Union[str, Path], model: str):
         self.handle = win32file.INVALID_HANDLE_VALUE
         self.target = target
-        self.hdl_target = {
-            "win32": target.upper().replace(r"\\.\PHYSICALDRIVE", "hdd") + ":"
-        }.get(sys.platform, target)
+        self.hdl_target = target.upper().replace(r"\\.\PHYSICALDRIVE", "hdd") + ":"
         self.model = model
 
         self._geometry = None
@@ -59,9 +56,8 @@ class HDD:
             win32file.CloseHandle(self.handle)
 
     def open(self, device: str, extended=False) -> HANDLE:
-        if sys.platform == "win32":
-            if not device.startswith("\\\\.\\"):
-                device = r"\\.\%s" % device  # unc target
+        if not device.startswith("\\\\.\\"):
+            device = r"\\.\%s" % device  # unc target
         self.handle = win32file.CreateFile(
             # https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
             device,  # target

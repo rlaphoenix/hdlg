@@ -45,8 +45,7 @@ class BaseWindow:
             )) +
             f"<p>Copyright (C) {datetime.now().year} PHOENiX</p>" +
             ("<p>{0}<br/><a href='{1}' style='color:white'>{1}</a></p>".format(
-                "Modern cross-platform GUI for hdl-dump.",
+                "Modern GUI for hdl-dump.",
                 "https://github.com/rlaphoenix/hdlg"
             ))
         )
-
