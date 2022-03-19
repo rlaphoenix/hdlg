@@ -1,14 +1,8 @@
 ![Banner](https://rawcdn.githack.com/rlaphoenix/hdlg/50bab8126da83a63e83bf6a5ce3d4d1f737ced2b/banner.png)
 
-* * *
-
+[![Build Tests](https://img.shields.io/github/workflow/status/rlaphoenix/hdlg/Build?label=Python%203.6%2B%20builds)](https://github.com/rlaphoenix/hdlg/actions?query=workflow%3A%22build%22)
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/rlaphoenix/hdlg/blob/master/LICENSE)
-[![PyPI version](https://img.shields.io/pypi/v/hdlg)](https://pypi.org/project/hdlg)
-[![Python versions](https://img.shields.io/pypi/pyversions/hdlg)](https://pypi.org/project/hdlg)
-[![PyPI status](https://img.shields.io/pypi/status/hdlg)](https://pypi.org/project/hdlg)
-[![Contributors](https://img.shields.io/github/contributors/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/graphs/contributors)
-[![GitHub issues](https://img.shields.io/github/issues/rlaphoenix/hdlg)](https://github.com/rlaphoenix/hdlg/issues)
-![Build](https://github.com/rlaphoenix/hdlg/workflows/Build/badge.svg?branch=master)
+<a><img align="right" src="https://img.shields.io/pypi/status/hdlg" alt="Project Status"/></a>
 
 HDLG is a modern GUI for hdl-dump with Batch installation capabilities.
 
