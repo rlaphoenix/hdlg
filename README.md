@@ -1,4 +1,6 @@
-# HDLG
+![Banner](https://rawcdn.githack.com/rlaphoenix/hdlg/50bab8126da83a63e83bf6a5ce3d4d1f737ced2b/banner.png)
+
+* * *
 
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/rlaphoenix/hdlg/blob/master/LICENSE)
 [![PyPI version](https://img.shields.io/pypi/v/hdlg)](https://pypi.org/project/hdlg)
