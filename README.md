@@ -12,11 +12,6 @@
 
 HDLG is a modern GUI for hdl-dump with Batch installation capabilities.
 
-## Looking for Artwork
-
-This project is looking for an Icon and Text Logo as well as a Banner artwork. If you have some free time and would
-like to contribute artwork to the project, let me know!
-
 ## Installation
 
     pip install --user hdlg
