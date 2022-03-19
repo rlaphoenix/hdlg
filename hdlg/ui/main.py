@@ -2,8 +2,13 @@ from __future__ import annotations
 
 import platform
 
-import pythoncom
-import wmi
+if platform.system() == "Windows":
+    import pythoncom
+    import wmi
+else:
+    pythoncom = None
+    wmi = None
+
 from PySide2 import QtWidgets, QtGui, QtCore
 
 from hdlg.hdd import HDD
