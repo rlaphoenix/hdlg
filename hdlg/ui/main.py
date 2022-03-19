@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import subprocess
+import traceback
+
 import pythoncom
 import wmi
 
 from PySide2 import QtWidgets, QtGui, QtCore
+from PySide2.QtWidgets import QMessageBox
 
 from hdlg.hdd import HDD
 from hdlg.ui import BaseWindow
@@ -131,8 +135,24 @@ class Main(BaseWindow):
             self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (hdd.target, hdd.model))
 
         def on_error(e: Exception):
-            print("An error occurred somewhere in Main->load_device():")
-            raise e
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Failed to load HDD")
+            msg.setText("An error occurred when loading the HDD:")
+            msg.setDetailedText(traceback.format_exc())
+
+            error = None
+            if isinstance(e, subprocess.CalledProcessError):
+                error = e.output
+                if e.returncode == 107:
+                    error = "APA partition is broken"
+
+            if error:
+                msg.setInformativeText(error)
+            else:
+                msg.setInformativeText(str(e))
+
+            msg.exec_()
 
         def use_hdd_info(trees: list[QtWidgets.QTreeWidgetItem]):
             self.window.hddInfoList.clear()
