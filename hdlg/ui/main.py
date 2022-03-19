@@ -95,8 +95,13 @@ class Main(BaseWindow):
             ]))
 
         def on_error(e: Exception):
-            print("An error occurred somewhere in Main->get_hdd_list():")
-            raise e
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Failed to list HDDs")
+            msg.setText("An error occurred when listing HDDs:")
+            msg.setDetailedText(traceback.format_exc())
+            msg.setInformativeText(str(e))
+            msg.exec_()
 
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
