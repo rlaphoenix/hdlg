@@ -35,3 +35,5 @@ hdlg = "hdlg.hdlg:main"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/rlaphoenix/hdlg/issues"
+"Forums" = "https://github.com/rlaphoenix/hdlg/discussions"
+"Changelog" = "https://github.com/rlaphoenix/hdlg/blob/master/CHANGELOG.md"
