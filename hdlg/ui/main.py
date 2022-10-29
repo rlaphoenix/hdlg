@@ -78,18 +78,15 @@ class Main(BaseWindow):
             self.window.hddInfoList.clear()
             self.window.hddInfoList.setEnabled(False)
             self.clear_hdd_list()
-            self.window.statusbar.showMessage("Scanning HDDs...")
 
             self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
                 "\n" * 8 + " " * 90 +
                 "Scanning for PS2 HDDs..."
             ]))
 
-        def on_finish(n: int):
+        def on_finish():
             self.window.refreshIcon.setEnabled(True)
             self.window.hddInfoList.clear()
-            self.window.statusbar.showMessage("Found %d HDDs" % n)
-
             self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
                 "\n" * 8 + " " * 60 +
                 "Ready to go? Just choose a PS2 HDD to get started!"
@@ -105,6 +102,7 @@ class Main(BaseWindow):
             msg.exec_()
 
         self.thread.started.connect(manage_state)
+        self.worker.status_message.connect(self.window.statusbar.showMessage)
         self.worker.finished.connect(on_finish)
         self.worker.error.connect(on_error)
         self.worker.found_device.connect(self.add_hdd_button)
@@ -127,7 +125,6 @@ class Main(BaseWindow):
             self.window.refreshIcon.setEnabled(False)
             self.window.installButton.hide()
             self.window.hddInfoList.clear()
-            self.window.statusbar.showMessage(f"Loading HDD %s (%s)" % (hdd.target, hdd.model))
 
             if self.window.installButton.isEnabled():
                 self.window.installButton.clicked.disconnect()
@@ -138,7 +135,6 @@ class Main(BaseWindow):
             self.window.installButton.setEnabled(True)
             self.window.installButton.show()
             self.window.hddInfoList.setEnabled(True)
-            self.window.statusbar.showMessage("Loaded HDD %s (%s)" % (hdd.target, hdd.model))
 
         def on_error(e: Exception):
             msg = QMessageBox()
@@ -172,6 +168,7 @@ class Main(BaseWindow):
             self.window.installButton.clicked.connect(lambda: self.install_game(hdd))
 
         self.thread.started.connect(manage_state)
+        self.worker.status_message.connect(self.window.statusbar.showMessage)
         self.worker.finished.connect(on_finish)
         self.worker.error.connect(on_error)
         self.worker.hdd_info.connect(use_hdd_info)
