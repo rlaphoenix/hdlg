@@ -29,6 +29,7 @@ If you wish to manually install from the source, take a look at [Building](#buil
 - [x] List installed games of selected HDD.
 - [x] Show HDD information like Disk Size, Space Used, and such.
 - [x] Add ability to install a new game to selected HDD.
+- [x] Add batch installation support by selecting more than one file.
 - [ ] Add Inno Setup script.
 - [ ] Create a file based settings system.
 - [ ] Add remote PS2 HDD (samba) connection option.
