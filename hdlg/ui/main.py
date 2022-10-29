@@ -218,9 +218,11 @@ class Main(BaseWindow):
             return
         media_type, game_size, disc_label, game_id = disc_info.groups()
 
+        self.window.deviceListDevices_2.setEnabled(False)
+        self.window.refreshIcon.setEnabled(False)
+        self.window.installButton.setEnabled(False)
         self.window.progressBar.show()
         self.window.progressBar.setValue(0)
-        self.window.installButton.setEnabled(False)
 
         thread = QtCore.QThread()
         worker = MainWorker()
@@ -232,6 +234,8 @@ class Main(BaseWindow):
 
         def on_finish():
             self.window.installButton.setText("Install")
+            self.window.deviceListDevices_2.setEnabled(True)
+            self.window.refreshIcon.setEnabled(True)
             self.window.installButton.setEnabled(True)
             # update disk usage and games list
             self.load_hdd(hdd)
