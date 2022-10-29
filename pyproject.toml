@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "hdlg"
-version = "0.1.0"
+version = "0.2.0"
 description = "Modern GUI for hdl-dump."
 license = "GPL-3.0-or-later"
 authors = ["PHOENiX <rlaphoenix@pm.me>"]
