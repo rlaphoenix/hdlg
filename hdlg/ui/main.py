@@ -18,10 +18,8 @@ class Main(BaseWindow):
     def __init__(self):
         super().__init__(name=self.__class__.__name__)
 
+        self.reset_state()
         self.window.setMinimumSize(1000, 400)
-        self.window.installButton.setEnabled(False)
-        self.window.installButton.hide()
-        self.window.progressBar.hide()
         self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
         self.window.actionExit.triggered.connect(self.window.close)
