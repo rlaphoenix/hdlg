@@ -22,18 +22,18 @@ class Main(BaseWindow):
         self.window.setMinimumSize(1000, 400)
         self.window.hddInfoList.header().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
+        # menu bar actions
         self.window.actionExit.triggered.connect(self.window.close)
         self.window.actionAbout.triggered.connect(self.about)
-        self.window.refreshIcon.clicked.connect(self.get_hdd_list)
 
-        self.get_hdd_list()
+        # button actions
+        self.window.refreshIcon.clicked.connect(self.refresh_hdd_list)
 
-    def clear_hdd_list(self) -> None:
-        """Clear all buttons from the HDD list."""
-        for child in self.window.deviceListDevices_2.children():
-            if isinstance(child, QtWidgets.QPushButton):
-                # noinspection PyTypeChecker
-                child.setParent(None)
+        # store data here to keep in scope and out of garbage collection
+        # necessary for the thread and worker class
+        self.GC_KEEP = None
+
+        self.refresh_hdd_list()
 
     def add_hdd_button(self, hdd: HDD) -> None:
         """Add an HDD button into the HDD list."""
@@ -87,27 +87,14 @@ class Main(BaseWindow):
         # Enable the Refresh Button
         self.window.refreshIcon.setEnabled(True)
 
-    def get_hdd_list(self) -> None:
-        """Finds HDD devices and adds them to the HDD list."""
-        self.thread = QtCore.QThread()
-        self.worker = MainWorker()
-        self.worker.moveToThread(self.thread)
+    def refresh_hdd_list(self) -> None:
+        """Remove list of HDD devices and reload them."""
+        self.reset_state()
+        self.window.refreshIcon.setEnabled(False)
 
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-
-        def manage_state():
-            self.window.refreshIcon.setEnabled(False)
-            self.window.installButton.hide()
-            self.window.hddInfoList.clear()
-            self.window.hddInfoList.setEnabled(False)
-            self.clear_hdd_list()
-
-            self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
-                "\n" * 8 + " " * 90 +
-                "Scanning for PS2 HDDs..."
-            ]))
+        thread = QtCore.QThread()
+        worker = MainWorker()
+        worker.moveToThread(thread)
 
         def on_finish():
             self.window.refreshIcon.setEnabled(True)
@@ -116,6 +103,7 @@ class Main(BaseWindow):
                 "\n" * 8 + " " * 60 +
                 "Ready to go? Just choose a PS2 HDD to get started!"
             ]))
+            thread.quit()
 
         def on_error(e: Exception):
             msg = QMessageBox()
@@ -126,33 +114,35 @@ class Main(BaseWindow):
             msg.setInformativeText(str(e))
             msg.exec_()
 
-        self.thread.started.connect(manage_state)
-        self.worker.status_message.connect(self.window.statusbar.showMessage)
-        self.worker.finished.connect(on_finish)
-        self.worker.error.connect(on_error)
-        self.worker.found_device.connect(self.add_hdd_button)
+        worker.finished.connect(on_finish)
+        worker.error.connect(on_error)
 
-        self.thread.started.connect(self.worker.find_hdds)
-        self.thread.start()
+        worker.status_message.connect(self.window.statusbar.showMessage)
+        worker.found_device.connect(self.add_hdd_button)
+
+        thread.started.connect(worker.find_hdds)
+        thread.start()
+
+        self.GC_KEEP = (thread, worker)
 
     def load_hdd(self, hdd: HDD):
         """Load HDD device, get HDD object, get device information."""
-        self.thread = QtCore.QThread()
-        self.worker = MainWorker()
-        self.worker.moveToThread(self.thread)
+        # prevent refreshing of HDDs, loading of an HDD, or installation
+        self.window.refreshIcon.setEnabled(False)
+        self.window.deviceListDevices_2.setEnabled(False)
+        self.window.installButton.hide()
+        if self.window.installButton.isEnabled():
+            self.window.installButton.clicked.disconnect()
 
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
+        self.window.hddInfoList.clear()
+        self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
+            "\n" * 8 + " " * 100 +
+            "Loading PS2 HDD..."
+        ]))
 
-        def manage_state():
-            self.window.deviceListDevices_2.setEnabled(False)
-            self.window.refreshIcon.setEnabled(False)
-            self.window.installButton.hide()
-            self.window.hddInfoList.clear()
-
-            if self.window.installButton.isEnabled():
-                self.window.installButton.clicked.disconnect()
+        thread = QtCore.QThread()
+        worker = MainWorker()
+        worker.moveToThread(thread)
 
         def on_finish():
             self.window.deviceListDevices_2.setEnabled(True)
@@ -160,6 +150,8 @@ class Main(BaseWindow):
             self.window.installButton.setEnabled(True)
             self.window.installButton.show()
             self.window.hddInfoList.setEnabled(True)
+            self.window.installButton.clicked.connect(lambda: self.install_game(hdd))
+            thread.quit()
 
         def on_error(e: Exception):
             msg = QMessageBox()
@@ -183,23 +175,22 @@ class Main(BaseWindow):
 
             msg.exec_()
 
-        def use_hdd_info(trees: list[QtWidgets.QTreeWidgetItem]):
+        def set_hdd_info(trees: list[QtWidgets.QTreeWidgetItem]):
             self.window.hddInfoList.clear()
             for tree in trees:
                 self.window.hddInfoList.addTopLevelItem(tree)
-
             self.window.hddInfoList.expandToDepth(0)
 
-            self.window.installButton.clicked.connect(lambda: self.install_game(hdd))
+        worker.finished.connect(on_finish)
+        worker.error.connect(on_error)
 
-        self.thread.started.connect(manage_state)
-        self.worker.status_message.connect(self.window.statusbar.showMessage)
-        self.worker.finished.connect(on_finish)
-        self.worker.error.connect(on_error)
-        self.worker.hdd_info.connect(use_hdd_info)
+        worker.status_message.connect(self.window.statusbar.showMessage)
+        worker.hdd_info.connect(set_hdd_info)
 
-        self.thread.started.connect(lambda: self.worker.get_hdd_info(hdd))
-        self.thread.start()
+        thread.started.connect(lambda: worker.get_hdd_info(hdd))
+        thread.start()
+
+        self.GC_KEEP = (thread, worker)
 
     def install_game(self, hdd: HDD):
         out_dir = QtWidgets.QFileDialog.getOpenFileName(
