@@ -43,7 +43,8 @@ ADDITIONAL_DATA = [
 ]
 HIDDEN_IMPORTS = ["PySide2.QtXml"]
 EXTRA_ARGS = [
-    "-y", "--win-private-assemblies", "--win-no-prefer-redirects"
+    "-y", "--win-private-assemblies", "--win-no-prefer-redirects",
+    "--uac-admin"  # require admin perms, it is needed!
 ]
 
 """Project Configuration"""
