@@ -208,8 +208,9 @@ class HDD:
         """
         # TODO: Add handler for when there's no games installed
         games = hdl_dump("hdl_toc", self.hdl_target)[1:-1]
+        # [!] will show as the Game Name for any game that was improperly installed
         games = [
-            NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5)
+            (NEIGHBORING_WHITESPACE.sub(" ", game).split(" ", maxsplit=5) + ["[!]"])[:6]
             for game in games
         ]
         games = [
