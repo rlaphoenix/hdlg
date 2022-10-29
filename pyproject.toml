@@ -12,7 +12,7 @@ readme = "README.md"
 repository = "https://github.com/rlaphoenix/hdlg"
 keywords = ["ps2", "hdl-dump", "ps2-hdd", "ps2-game-installer"]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
     "Natural Language :: English",
     "Operating System :: Microsoft :: Windows",
