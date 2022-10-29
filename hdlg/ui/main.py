@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 import re
 import subprocess
 import traceback
@@ -230,10 +229,8 @@ class Main(BaseWindow):
 
         def on_progress(n: float):
             self.window.progressBar.setValue(n)
-            self.window.installButton.setText("Installing... %d%%" % math.floor(n))
 
         def on_finish():
-            self.window.installButton.setText("Install")
             self.window.deviceListDevices_2.setEnabled(True)
             self.window.refreshIcon.setEnabled(True)
             self.window.installButton.setEnabled(True)
