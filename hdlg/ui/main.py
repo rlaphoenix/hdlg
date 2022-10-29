@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import re
 import subprocess
 import traceback
+from pathlib import Path
 
 import pythoncom
 import wmi
@@ -11,7 +13,7 @@ from PySide2.QtWidgets import QMessageBox
 
 from hdlg.hdd import HDD
 from hdlg.ui import BaseWindow
-from hdlg.utils import size_unit
+from hdlg.utils import size_unit, hdl_dump
 
 
 class Main(BaseWindow):
@@ -168,6 +170,8 @@ class Main(BaseWindow):
 
             self.window.hddInfoList.expandToDepth(0)
 
+            self.window.installButton.clicked.connect(lambda: self.install_game(hdd))
+
         self.thread.started.connect(manage_state)
         self.worker.finished.connect(on_finish)
         self.worker.error.connect(on_error)
@@ -175,6 +179,36 @@ class Main(BaseWindow):
 
         self.thread.started.connect(lambda: self.worker.get_hdd_info(hdd))
         self.thread.start()
+
+    def install_game(self, hdd: HDD):
+        out_dir = QtWidgets.QFileDialog.getOpenFileName(
+            self.window,
+            "Install PS2 Disc Image (ISO)",
+            filter="PS2 ISO (*.ISO);;All files (*.*)",
+            # dir=str(cfg.user_cfg.last_opened_directory or "")
+        )
+        if not out_dir:
+            self.log.debug("Cancelled Installation as no PS2 Disc Image (ISO) was provided.")
+            return
+        out_dir = Path(out_dir[0])
+
+        # TODO: Verify info cdvd_info
+        disc_info = hdl_dump("cdvd_info2", str(out_dir))[0]
+        disc_info = re.match(r'^([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
+        if not disc_info:
+            QMessageBox.information(
+                self.window,
+                "HDLG",
+                f"The ISO file ({out_dir}) does not seem to be a valid PlayStation 2 ISO file, cannot install."
+            )
+            return
+        media_type, game_size, disc_label, game_id = disc_info.groups()
+        QMessageBox.information(
+            self.window,
+            "HDLG",
+            "Installation functionality WIP, debug data:\n"
+            f"{media_type, game_size, disc_label, game_id}"
+        )
 
 
 class MainWorker(QtCore.QObject):
