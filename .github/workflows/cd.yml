@@ -25,6 +25,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel
           poetry install
+      - name: Make a Frozen Build
+        run: poetry run python pyinstaller.py
+      - name: Building a Windows Installer
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "setup.iss"
+        shell: cmd
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: Windows Installer
+          path: |
+            dist/HDLG-Setup.exe
+            dist/HDLG-Setup-Manifest.txt
       - name: Build a wheel
         run: poetry build
       - name: Upload wheel
@@ -39,6 +52,8 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: |
             dist/*.whl
+            dist/HDLG-Setup.exe
+            dist/HDLG-Setup-Manifest.txt
       - name: Publish to PyPI
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
