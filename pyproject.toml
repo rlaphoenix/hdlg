@@ -20,11 +20,11 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6,<3.10"
-PySide2 = "^5.15.2"
+python = ">=3.6,<3.11"
+PySide2 = "^5.15.2.1"
 appdirs = "^1.4.4"
 toml = "^0.10.2"
-pywin32 = "302"
+pywin32 = "304"
 WMI = "^1.5.1"
 
 [tool.poetry.dev-dependencies]
