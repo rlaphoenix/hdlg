@@ -77,6 +77,13 @@ class Main(BaseWindow):
         ]))
 
         # Reset the Installation Button
+        try:
+            # if you refresh after loading an HDD, you will end up with 2x receivers
+            # so disconnect the oldest and leave the newest
+            self.window.installButton.clicked.disconnect()
+        except RuntimeError:
+            # has no receiver, it's fine
+            pass
         self.window.installButton.setEnabled(False)
         self.window.installButton.hide()
 
