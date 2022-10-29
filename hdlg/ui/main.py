@@ -62,6 +62,33 @@ class Main(BaseWindow):
         device_list = self.window.deviceListDevices_2.layout()
         device_list.insertWidget(0 if hdd.is_apa_partitioned else device_list.count() - 1, button)
 
+    def reset_state(self) -> None:
+        """Reset the State of the UI and Application to the initial startup."""
+        # Clear all HDD buttons from the HDD list
+        for child in self.window.deviceListDevices_2.children():
+            if isinstance(child, QtWidgets.QPushButton):
+                # noinspection PyTypeChecker
+                child.setParent(None)
+
+        # Reset the HDD information panel
+        self.window.hddInfoList.clear()
+        self.window.hddInfoList.setEnabled(False)
+        self.window.hddInfoList.addTopLevelItem(QtWidgets.QTreeWidgetItem([
+            "\n" * 8 + " " * 90 +
+            "Scanning for PS2 HDDs..."
+        ]))
+
+        # Reset the Installation Button
+        self.window.installButton.setEnabled(False)
+        self.window.installButton.hide()
+
+        # Reset the Progress Bar
+        self.window.progressBar.hide()
+        self.window.progressBar.setValue(0)
+
+        # Enable the Refresh Button
+        self.window.refreshIcon.setEnabled(True)
+
     def get_hdd_list(self) -> None:
         """Finds HDD devices and adds them to the HDD list."""
         self.thread = QtCore.QThread()
