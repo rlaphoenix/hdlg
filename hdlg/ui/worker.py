@@ -15,7 +15,11 @@ class MainWorker(QObject):
     hdd_info = Signal(list)
 
     def find_hdds(self) -> None:
-        """Find Disk Drive devices using WMI on Windows."""
+        """
+        Find Disk Drive devices using WMI on Windows.
+
+        TODO: Add support for Linux and macOS.
+        """
         try:
             self.status_message.emit("Scanning HDDs...")
             # noinspection PyUnresolvedReferences
@@ -33,6 +37,7 @@ class MainWorker(QObject):
             self.error.emit(e)
 
     def get_hdd_info(self, hdd: HDD) -> None:
+        """Get HDD Usage Information like Total/Used/Available Disk Space and a list of Games."""
         try:
             self.status_message.emit(f"Loading HDD %s (%s)" % (hdd.target, hdd.model))
             disk_usage_percent = [
