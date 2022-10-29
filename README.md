@@ -1,6 +1,6 @@
 ![Banner](https://rawcdn.githack.com/rlaphoenix/hdlg/50bab8126da83a63e83bf6a5ce3d4d1f737ced2b/banner.png)
 
-[![Build Tests](https://img.shields.io/github/workflow/status/rlaphoenix/hdlg/Build?label=Python%203.6%2B%20builds)](https://github.com/rlaphoenix/hdlg/actions?query=workflow%3A%22build%22)
+[![Build Tests](https://img.shields.io/github/workflow/status/rlaphoenix/hdlg/Build?label=Python%203.6%2B%20builds)](https://github.com/rlaphoenix/hdlg/actions/workflows/ci.yml)
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/rlaphoenix/hdlg/blob/master/LICENSE)
 <a><img align="right" src="https://img.shields.io/pypi/status/hdlg" alt="Project Status"/></a>
 
