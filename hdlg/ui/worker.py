@@ -9,7 +9,7 @@ from hdlg.utils import size_unit
 
 class MainWorker(QObject):
     error = Signal(Exception)
-    finished = Signal(int)
+    finished = Signal()
     status_message = Signal(str)
     found_device = Signal(HDD)
     hdd_info = Signal(list)
@@ -28,7 +28,7 @@ class MainWorker(QObject):
                     model=disk_drive.Model
                 ))
             self.status_message.emit(f"Found {len(disk_drives)} HDDs")
-            self.finished.emit(len(disk_drives))
+            self.finished.emit()
         except Exception as e:
             self.error.emit(e)
 
@@ -63,6 +63,6 @@ class MainWorker(QObject):
                 games_tree
             ])
             self.status_message.emit(f"Loaded HDD %s (%s)" % (hdd.target, hdd.model))
-            self.finished.emit(0)
+            self.finished.emit()
         except Exception as e:
             self.error.emit(e)

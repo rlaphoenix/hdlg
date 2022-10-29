@@ -129,7 +129,7 @@ class Main(BaseWindow):
             if self.window.installButton.isEnabled():
                 self.window.installButton.clicked.disconnect()
 
-        def on_finish(_: int):
+        def on_finish():
             self.window.deviceListDevices_2.setEnabled(True)
             self.window.refreshIcon.setEnabled(True)
             self.window.installButton.setEnabled(True)
