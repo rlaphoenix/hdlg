@@ -6,7 +6,7 @@
 [Setup]
 AppId={#AppName}
 AppName={#AppName}
-AppPublisher=PHOENiX
+AppPublisher=rlaphoenix
 AppPublisherURL=https://github.com/rlaphoenix/hdlg
 AppReadmeFile=https://github.com/rlaphoenix/hdlg/blob/master/README.md
 AppSupportURL=https://github.com/rlaphoenix/hdlg/discussions
