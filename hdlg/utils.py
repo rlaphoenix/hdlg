@@ -3,6 +3,7 @@ import re
 import shutil
 import subprocess
 import sys
+from typing import Iterator
 
 HDL_DUMP_BIN = shutil.which("hdl-dump") or shutil.which("hdl_dump")
 NEIGHBORING_WHITESPACE = re.compile(r"[\s]{2,}")
@@ -79,3 +80,12 @@ def hdl_dump(*args) -> list[str]:
     """Make a call to hdl-dump and return the string output."""
     res = subprocess.check_output([HDL_DUMP_BIN, *args])
     return res.decode().splitlines()
+
+
+def hdl_dump_live(*args) -> Iterator[str]:
+    """Make a call to hdl-dump and return every line as they are written to the std."""
+    res = subprocess.Popen([HDL_DUMP_BIN, *args], stdout=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    while res.poll() is None:
+        line = res.stdout.readline()
+        if line:
+            yield line.strip()
