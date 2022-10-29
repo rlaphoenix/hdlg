@@ -10,12 +10,14 @@ from hdlg.utils import size_unit
 class MainWorker(QObject):
     error = Signal(Exception)
     finished = Signal(int)
+    status_message = Signal(str)
     found_device = Signal(HDD)
     hdd_info = Signal(list)
 
     def find_hdds(self) -> None:
         """Find Disk Drive devices using WMI on Windows."""
         try:
+            self.status_message.emit("Scanning HDDs...")
             # noinspection PyUnresolvedReferences
             pythoncom.CoInitialize()  # important!
             c = WMI()
@@ -25,12 +27,14 @@ class MainWorker(QObject):
                     target=disk_drive.DeviceID,
                     model=disk_drive.Model
                 ))
+            self.status_message.emit(f"Found {len(disk_drives)} HDDs")
             self.finished.emit(len(disk_drives))
         except Exception as e:
             self.error.emit(e)
 
     def get_hdd_info(self, hdd: HDD) -> None:
         try:
+            self.status_message.emit(f"Loading HDD %s (%s)" % (hdd.target, hdd.model))
             disk_usage_percent = [
                 (hdd.disk_map[1] / hdd.disk_map[0]) * 100,  # Used
                 (hdd.disk_map[2] / hdd.disk_map[0]) * 100,  # Available
@@ -58,6 +62,7 @@ class MainWorker(QObject):
                 space_tree,
                 games_tree
             ])
+            self.status_message.emit(f"Loaded HDD %s (%s)" % (hdd.target, hdd.model))
             self.finished.emit(0)
         except Exception as e:
             self.error.emit(e)
