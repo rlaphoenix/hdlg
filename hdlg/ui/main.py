@@ -199,7 +199,7 @@ class Main(BaseWindow):
             filter="PS2 ISO (*.ISO);;All files (*.*)",
             # dir=str(cfg.user_cfg.last_opened_directory or "")
         )
-        if not out_dir:
+        if not out_dir[0]:
             self.log.debug("Cancelled Installation as no PS2 Disc Image (ISO) was provided.")
             return
         out_dir = Path(out_dir[0])
