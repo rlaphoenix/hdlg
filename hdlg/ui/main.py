@@ -193,25 +193,26 @@ class Main(BaseWindow):
         self.GC_KEEP = (thread, worker)
 
     def install_game(self, hdd: HDD):
-        out_dir = QtWidgets.QFileDialog.getOpenFileName(
+        iso_path = QtWidgets.QFileDialog.getOpenFileName(
             self.window,
             "Install PS2 Disc Image (ISO)",
-            filter="PS2 ISO (*.ISO);;All files (*.*)",
+            filter="PS2 ISO (*.ISO);;CDRWIN BIN/CUE (*.CUE);;Nero Burning Rom Image (*.NRG);;"
+                   "RecordNow! Global Image (*.GI);;Sony CD/DVD Intermediate (*.IML);;All files (*.*)",
             # dir=str(cfg.user_cfg.last_opened_directory or "")
         )
-        if not out_dir[0]:
+        if not iso_path[0]:
             self.log.debug("Cancelled Installation as no PS2 Disc Image (ISO) was provided.")
             return
-        out_dir = Path(out_dir[0])
+        iso_path = Path(iso_path[0])
 
         # TODO: Verify info cdvd_info
-        disc_info = hdl_dump("cdvd_info2", str(out_dir))[0]
+        disc_info = hdl_dump("cdvd_info2", str(iso_path))[0]
         disc_info = re.match(r'^([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
         if not disc_info:
             QMessageBox.information(
                 self.window,
                 "HDLG",
-                f"The ISO file ({out_dir}) does not seem to be a valid PlayStation 2 ISO file, cannot install."
+                f"The ISO file ({iso_path}) does not seem to be a valid PlayStation 2 ISO file, cannot install."
             )
             return
         media_type, game_size, disc_label, game_id = disc_info.groups()
