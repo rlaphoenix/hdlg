@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import math
 import re
 import subprocess
 import traceback
+from functools import partial
 from pathlib import Path
 
 from PySide2 import QtWidgets, QtGui, QtCore
@@ -216,9 +218,42 @@ class Main(BaseWindow):
             )
             return
         media_type, game_size, disc_label, game_id = disc_info.groups()
-        QMessageBox.information(
-            self.window,
-            "HDLG",
-            "Installation functionality WIP, debug data:\n"
-            f"{media_type, game_size, disc_label, game_id}"
-        )
+
+        self.window.progressBar.show()
+        self.window.progressBar.setValue(0)
+        self.window.installButton.setEnabled(False)
+
+        thread = QtCore.QThread()
+        worker = MainWorker()
+        worker.moveToThread(thread)
+
+        def on_progress(n: float):
+            self.window.progressBar.setValue(n)
+            self.window.installButton.setText("Installing... %d%%" % math.floor(n))
+
+        def on_finish():
+            self.window.installButton.setText("Install")
+            self.window.installButton.setEnabled(True)
+            # update disk usage and games list
+            self.load_hdd(hdd)
+            thread.quit()
+
+        def on_error(e: Exception):
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Failed to install Game")
+            msg.setText("An error occurred when installing a Game to an HDD:")
+            msg.setDetailedText(traceback.format_exc())
+            msg.setInformativeText(str(e))
+            msg.exec_()
+
+        worker.progress.connect(on_progress)
+        worker.finished.connect(on_finish)
+        worker.error.connect(on_error)
+
+        worker.status_message.connect(self.window.statusbar.showMessage)
+
+        thread.started.connect(partial(worker.install_game, hdd, iso_path, media_type, disc_label, game_id))
+        thread.start()
+
+        self.GC_KEEP = (thread, worker)

@@ -1,15 +1,18 @@
+from pathlib import Path
+
 import pythoncom
 from PySide2.QtCore import QObject, Signal
 from PySide2.QtWidgets import QTreeWidgetItem
 from wmi import WMI
 
 from hdlg.hdd import HDD
-from hdlg.utils import size_unit
+from hdlg.utils import size_unit, hdl_dump_live
 
 
 class MainWorker(QObject):
     error = Signal(Exception)
     finished = Signal()
+    progress = Signal(float)
     status_message = Signal(str)
     found_device = Signal(HDD)
     hdd_info = Signal(list)
@@ -68,6 +71,29 @@ class MainWorker(QObject):
                 games_tree
             ])
             self.status_message.emit(f"Loaded HDD %s (%s)" % (hdd.target, hdd.model))
+            self.finished.emit()
+        except Exception as e:
+            self.error.emit(e)
+
+    def install_game(self, hdd: HDD, iso: Path, media_type: str, disc_label: str, game_id: str):
+        """Install a Game ISO to a PS2 HDD."""
+        try:
+            self.status_message.emit(f"Installing {iso.stem} ({game_id})")
+            for line in hdl_dump_live(
+                f"inject_{media_type.lower()}",
+                hdd.hdl_target, iso.stem.title(), str(iso.absolute()), game_id
+            ):
+                progress = line.split(", ")
+                if len(progress) == 3:
+                    progress, remaining, speed = progress
+                else:
+                    progress, remaining, speed = progress[0], None, None
+                self.status_message.emit(", ".join(x for x in [
+                    f"{progress} Installed {iso.stem} ({game_id})", remaining, speed
+                ] if x))
+                progress = float(progress.split("%")[0])
+                self.progress.emit(progress)
+            self.status_message.emit("Installed %s (%s %s)..." % (disc_label, game_id, media_type))
             self.finished.emit()
         except Exception as e:
             self.error.emit(e)
