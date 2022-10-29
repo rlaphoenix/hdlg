@@ -148,8 +148,10 @@ class Main(BaseWindow):
 
             error = None
             if isinstance(e, subprocess.CalledProcessError):
-                error = e.output
-                if e.returncode == 107:
+                error = e.output.decode()
+                if error and "unrecognized command" in error:
+                    error = "Unrecognized command, hdl-dump version may be too old."
+                elif e.returncode == 107:
                     error = "APA partition is broken"
 
             if error:
