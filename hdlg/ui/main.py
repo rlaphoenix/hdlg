@@ -4,7 +4,6 @@ import math
 import re
 import subprocess
 import traceback
-from functools import partial
 from pathlib import Path
 
 from PySide2 import QtWidgets, QtGui, QtCore
@@ -253,7 +252,9 @@ class Main(BaseWindow):
 
         worker.status_message.connect(self.window.statusbar.showMessage)
 
-        thread.started.connect(partial(worker.install_game, hdd, iso_path, media_type, disc_label, game_id))
+        # TODO: Is there a better way to do this?
+        worker.game.connect(worker.install_game)
+        thread.started.connect(lambda: worker.game.emit(hdd, iso_path, media_type, disc_label, game_id))
         thread.start()
 
         self.GC_KEEP = (thread, worker)

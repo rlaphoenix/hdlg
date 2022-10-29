@@ -16,6 +16,7 @@ class MainWorker(QObject):
     status_message = Signal(str)
     found_device = Signal(HDD)
     hdd_info = Signal(list)
+    game = Signal(HDD, Path, str, str, str)
 
     def find_hdds(self) -> None:
         """
