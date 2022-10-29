@@ -200,69 +200,77 @@ class Main(BaseWindow):
         self.GC_KEEP = (thread, worker)
 
     def install_game(self, hdd: HDD):
-        iso_path = QtWidgets.QFileDialog.getOpenFileName(
+        filenames = QtWidgets.QFileDialog.getOpenFileNames(
             self.window,
-            "Install PS2 Disc Image (ISO)",
+            "Select one or more PS2 Games to Install",
             filter="PS2 ISO (*.ISO);;CDRWIN BIN/CUE (*.CUE);;Nero Burning Rom Image (*.NRG);;"
                    "RecordNow! Global Image (*.GI);;Sony CD/DVD Intermediate (*.IML);;All files (*.*)",
             # dir=str(cfg.user_cfg.last_opened_directory or "")
         )
-        if not iso_path[0]:
+        if not filenames[0]:
             self.log.debug("Cancelled Installation as no PS2 Disc Image (ISO) was provided.")
             return
-        iso_path = Path(iso_path[0])
+        filenames = [Path(x) for x in filenames[0]]
 
-        # TODO: Verify info cdvd_info
-        disc_info = hdl_dump("cdvd_info2", str(iso_path))[0]
-        disc_info = re.match(r'^([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
-        if not disc_info:
-            QMessageBox.information(
-                self.window,
-                "HDLG",
-                f"The ISO file ({iso_path}) does not seem to be a valid PlayStation 2 ISO file, cannot install."
-            )
-            return
-        media_type, game_size, disc_label, game_id = disc_info.groups()
+        def _install(index: int = 0):
+            if index > len(filenames) - 1:
+                return
+            iso_path = filenames[index]
+            # TODO: Verify info cdvd_info
+            disc_info = hdl_dump("cdvd_info2", str(iso_path))[0]
+            disc_info = re.match(r'^([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
+            if disc_info:
+                media_type, game_size, disc_label, game_id = disc_info.groups()
 
-        self.window.deviceListDevices_2.setEnabled(False)
-        self.window.refreshIcon.setEnabled(False)
-        self.window.installButton.setEnabled(False)
-        self.window.progressBar.show()
-        self.window.progressBar.setValue(0)
+                self.window.deviceListDevices_2.setEnabled(False)
+                self.window.refreshIcon.setEnabled(False)
+                self.window.installButton.setEnabled(False)
+                self.window.progressBar.show()
+                self.window.progressBar.setValue(0)
 
-        thread = QtCore.QThread()
-        worker = MainWorker()
-        worker.moveToThread(thread)
+                thread = QtCore.QThread()
+                worker = MainWorker()
+                worker.moveToThread(thread)
 
-        def on_progress(n: float):
-            self.window.progressBar.setValue(n)
+                def on_progress(n: float):
+                    self.window.progressBar.setValue(n)
 
-        def on_finish():
-            self.window.deviceListDevices_2.setEnabled(True)
-            self.window.refreshIcon.setEnabled(True)
-            self.window.installButton.setEnabled(True)
-            # update disk usage and games list
-            self.load_hdd(hdd)
-            thread.quit()
+                def on_finish():
+                    self.window.deviceListDevices_2.setEnabled(True)
+                    self.window.refreshIcon.setEnabled(True)
+                    self.window.installButton.setEnabled(True)
+                    # update disk usage and games list
+                    self.load_hdd(hdd)
+                    thread.quit()
+                    _install(index + 1)
 
-        def on_error(e: Exception):
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Critical)
-            msg.setWindowTitle("Failed to install Game")
-            msg.setText("An error occurred when installing a Game to an HDD:")
-            msg.setDetailedText(traceback.format_exc())
-            msg.setInformativeText(str(e))
-            msg.exec_()
+                def on_error(e: Exception):
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Critical)
+                    msg.setWindowTitle("Failed to install Game")
+                    msg.setText("An error occurred when installing a Game to an HDD:")
+                    msg.setDetailedText(traceback.format_exc())
+                    msg.setInformativeText(str(e))
+                    msg.exec_()
 
-        worker.progress.connect(on_progress)
-        worker.finished.connect(on_finish)
-        worker.error.connect(on_error)
+                worker.progress.connect(on_progress)
+                worker.finished.connect(on_finish)
+                worker.error.connect(on_error)
 
-        worker.status_message.connect(self.window.statusbar.showMessage)
+                worker.status_message.connect(self.window.statusbar.showMessage)
 
-        # TODO: Is there a better way to do this?
-        worker.game.connect(worker.install_game)
-        thread.started.connect(lambda: worker.game.emit(hdd, iso_path, media_type, disc_label, game_id))
-        thread.start()
+                # TODO: Is there a better way to do this?
+                worker.game.connect(worker.install_game)
+                thread.started.connect(lambda: worker.game.emit(hdd, iso_path, media_type, disc_label, game_id))
+                thread.start()
 
-        self.GC_KEEP = (thread, worker)
+                self.GC_KEEP = (thread, worker)
+            else:
+                QMessageBox.information(
+                    self.window,
+                    "Invalid ISO File",
+                    f"Skipping \"{iso_path}\" as it does not seem to be a valid PlayStation 2 ISO file..."
+                )
+                _install(index + 1)
+
+        _install()
