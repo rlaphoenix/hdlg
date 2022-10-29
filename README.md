@@ -35,7 +35,7 @@ If you wish to manually install from the source, take a look at [Building](#buil
 - [x] Add batch installation support by selecting more than one file.
 - [ ] Create a file based settings system.
 - [ ] Add per-install settings like startup, flags, and DMA mode.
-- [ ] Add ability to format an HDD for use with a PS2.
+- [ ] Add ability to format an HDD for use with a PS2 with `pfsshell`.
 - [ ] Add ability to rename the Game Name of installed games.
 - [ ] Add ability to extract an installed game from the PS2 HDD.
 - [ ] Add ability to view an installed game's sector table.
