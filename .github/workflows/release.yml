@@ -23,7 +23,7 @@ jobs:
         run: poetry config virtualenvs.in-project true
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip twine
+          python -m pip install --upgrade pip wheel
           poetry install
       - name: Build a wheel
         run: poetry build
@@ -41,6 +41,5 @@ jobs:
             dist/*.whl
       - name: Publish to PyPI
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: twine upload dist/*
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: poetry publish
