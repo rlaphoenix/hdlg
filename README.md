@@ -9,7 +9,7 @@ HDLG is a modern GUI for hdl-dump with Batch installation capabilities.
 **hdl-dump**: <https://github.com/ps2homebrew/hdl-dump>  
 **wLaunchELF**: <https://github.com/ps2homebrew/wLaunchELF>
 
-![Preview](https://user-images.githubusercontent.com/17136956/198775765-6d15b91c-6526-4ad1-af10-d9e7e79c5ca9.png)  
+![Preview](https://user-images.githubusercontent.com/17136956/198822365-f244dcf6-3050-45f2-83dd-c32c4d36f976.png)  
 *Preview as of October 2022.*
 
 ## Installation
