@@ -27,7 +27,7 @@ If you wish to manually install from the source, take a look at [Building](#buil
 - [x] Add PyInstaller make file.
 - [x] Add local PS2 HDD connection option.
 - [x] List installed games of selected HDD.
-- [ ] Show HDD information like Disk Size, Space Used, and such.
+- [x] Show HDD information like Disk Size, Space Used, and such.
 - [ ] Add Inno Setup script.
 - [ ] Add ability to install a new game to selected HDD.
 - [ ] Create a file based settings system.
