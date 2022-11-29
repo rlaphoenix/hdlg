@@ -203,8 +203,14 @@ class Main(BaseWindow):
         filenames = QtWidgets.QFileDialog.getOpenFileNames(
             self.window,
             "Select one or more PS2 Games to Install",
-            filter="PS2 ISO (*.ISO);;CDRWIN BIN/CUE (*.CUE);;Nero Burning Rom Image (*.NRG);;"
-                   "RecordNow! Global Image (*.GI);;Sony CD/DVD Intermediate (*.IML);;All files (*.*)",
+            filter="All supported formats (*.ISO *.ZSO *.GI *.CUE *.IML *.NRG);;"
+                   "ISO images (*.ISO);;"
+                   "ZSO Compressed ISO images (*.ZSO);;"
+                   "CDRWIN cuesheets (*.CUE);;"
+                   "Nero Burning Rom images (*.NRG);;"
+                   "RecordNow! Global Image (*.GI);;"
+                   "Sony CD/DVD Intermediate files (*.IML);;"
+                   "All files (*.*)",
             # dir=str(cfg.user_cfg.last_opened_directory or "")
         )
         if not filenames[0]:
