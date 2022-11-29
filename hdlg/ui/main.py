@@ -224,7 +224,7 @@ class Main(BaseWindow):
             iso_path = filenames[index]
             # TODO: Verify info cdvd_info
             disc_info = hdl_dump("cdvd_info2", str(iso_path))[0]
-            disc_info = re.match(r'^([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
+            disc_info = re.match(r'^(?:dual-layer )?([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
             if disc_info:
                 media_type, game_size, disc_label, game_id = disc_info.groups()
 
