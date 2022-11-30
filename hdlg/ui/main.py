@@ -11,7 +11,7 @@ from PySide2.QtWidgets import QMessageBox
 from hdlg.hdd import HDD
 from hdlg.ui import BaseWindow
 from hdlg.ui.worker import MainWorker
-from hdlg.utils import size_unit, hdl_dump
+from hdlg.utils import size_unit, HDL_DUMP_BIN
 
 
 class Main(BaseWindow):
@@ -223,9 +223,23 @@ class Main(BaseWindow):
                 return
             iso_path = filenames[index]
             # TODO: Verify info cdvd_info
-            disc_info = hdl_dump("cdvd_info2", str(iso_path))[0]
-            disc_info = re.match(r'^(?:dual-layer )?([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', disc_info)
-            if disc_info:
+            try:
+                cdvd_info = subprocess.check_output([
+                    HDL_DUMP_BIN,
+                    "cdvd_info2",
+                    str(iso_path)
+                ], stderr=subprocess.PIPE)
+
+                disc_info = re.match(r'^(?:dual-layer )?([^ ]*) +(\d+)KB +"([^"]*)" +"([^"]+)"', cdvd_info.decode())
+                if not disc_info:
+                    QMessageBox.information(
+                        self.window,
+                        "Unable to Identify Game Data",
+                        f"Skipping \"{iso_path}\" as game information like Media Type and ID could not be identified.\n"
+                        f"\n" +
+                        cdvd_info.decode()
+                    )
+                    return
                 media_type, game_size, disc_label, game_id = disc_info.groups()
 
                 self.window.deviceListDevices_2.setEnabled(False)
@@ -271,12 +285,13 @@ class Main(BaseWindow):
                 thread.start()
 
                 self.GC_KEEP = (thread, worker)
-            else:
+            except subprocess.CalledProcessError as e:
                 QMessageBox.information(
                     self.window,
-                    "Invalid ISO File",
-                    f"Skipping \"{iso_path}\" as it does not seem to be a valid PlayStation 2 ISO file..."
+                    "Cannot Install Game",
+                    f"Skipping \"{iso_path}\" due to an error: {e.stderr.decode()}"
                 )
+            finally:
                 _install(index + 1)
 
         _install()
