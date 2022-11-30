@@ -239,6 +239,7 @@ class Main(BaseWindow):
                         f"\n" +
                         cdvd_info.decode()
                     )
+                    _install(index + 1)
                     return
                 media_type, game_size, disc_label, game_id = disc_info.groups()
 
@@ -291,7 +292,6 @@ class Main(BaseWindow):
                     "Cannot Install Game",
                     f"Skipping \"{iso_path}\" due to an error: {e.stderr.decode().strip()} [{e.returncode}]"
                 )
-            finally:
                 _install(index + 1)
 
         _install()
