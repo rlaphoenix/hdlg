@@ -289,7 +289,7 @@ class Main(BaseWindow):
                 QMessageBox.information(
                     self.window,
                     "Cannot Install Game",
-                    f"Skipping \"{iso_path}\" due to an error: {e.stderr.decode()}"
+                    f"Skipping \"{iso_path}\" due to an error: {e.stderr.decode().strip()} [{e.returncode}]"
                 )
             finally:
                 _install(index + 1)
