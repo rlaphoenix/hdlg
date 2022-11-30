@@ -1,6 +1,9 @@
 # hdlg
 *.exe
 
+# hdl-dump
+info.sys
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
