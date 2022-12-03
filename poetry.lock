@@ -80,7 +80,7 @@ setuptools = "*"
 
 [package.extras]
 encryption = ["tinyaes (>=1.0.0)"]
-hook_testing = ["execnet (>=1.5.0)", "psutil", "pytest (>=2.7.3)"]
+hook-testing = ["execnet (>=1.5.0)", "psutil", "pytest (>=2.7.3)"]
 
 [[package]]
 name = "pyinstaller-hooks-contrib"

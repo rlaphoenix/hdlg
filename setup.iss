@@ -1,7 +1,7 @@
 ; https://jrsoftware.org/ishelp/index.php
 
 #define AppName "HDLG"
-#define Version "0.2.0"
+#define Version "0.2.1"
 
 [Setup]
 AppId={#AppName}
