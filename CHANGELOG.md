@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2022-12-03
+
+### Added
+
+- Added new Open File Dialog filter that shows ALL supported game files by default.
+- Added ZSO files to the Open File Dialog filter, even though hdl-dump doesn't yet seem to properly support ZSO.
+
+### Fixed
+
+- Fixed support for Dual-layer DVD games (any game above 4GB in size).
+- Properly request Admin Rights on PyInstaller builds, fixing a startup crash.
+- Now handles errors with cdvd_info2 calls more efficiently and safely.
+
 ## [0.2.0] - 2022-10-29
 
 ### Added
@@ -93,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - There is no working logic except for File -> Exit and About options of the Menu Bar.
 - Only basic main window layout and appearance has been created so far.
 
+[0.2.1]: https://github.com/rlaphoenix/hdlg/releases/tag/v0.2.1
 [0.2.0]: https://github.com/rlaphoenix/hdlg/releases/tag/v0.2.0
 [0.1.0]: https://github.com/rlaphoenix/hdlg/releases/tag/v0.1.0
 [0.0.1]: https://github.com/rlaphoenix/hdlg/releases/tag/v0.0.1
