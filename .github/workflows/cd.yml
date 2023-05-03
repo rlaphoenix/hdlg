@@ -1,4 +1,9 @@
 name: cd
+permissions:
+  contents: "write"
+  id-token: "write"
+  packages: "write"
+  pull-requests: "read"
 
 on:
   push:
@@ -10,38 +15,33 @@ jobs:
     name: Tagged Release
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10.x'
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
+        uses: abatilo/actions-poetry@v2.3.0
         with:
-          poetry-version: '1.2.2'
-      - name: Configure poetry
-        run: poetry config virtualenvs.in-project true
+          poetry-version: '1.4.1'
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip wheel
-          poetry install
+        run: poetry install
       - name: Make a Frozen Build
         run: poetry run python pyinstaller.py
       - name: Building a Windows Installer
-        run: |
-          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "setup.iss"
+        run: "%programfiles(x86)%\Inno Setup 6\iscc.exe" "setup.iss"
         shell: cmd
       - name: Upload Windows Installer
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3
         with:
           name: Windows Installer
           path: |
             dist/HDLG-Setup.exe
             dist/HDLG-Setup-Manifest.txt
-      - name: Build a wheel
+      - name: Build project
         run: poetry build
       - name: Upload wheel
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3
         with:
           name: Python Wheel
           path: "dist/*.whl"
