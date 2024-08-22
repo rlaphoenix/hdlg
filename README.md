@@ -1,3 +1,11 @@
+# No longer in Development
+
+I no longer own any PS2 systems, nor plan to in the future. Therefore, I cannot test any updates to this.  
+Feel free to fork this project and continue it, including using any of the artwork, just please follow the license.  
+If you have a successful fork that eventually trumps this original project repo, please let me know.
+
+* * *
+
 ![Banner](https://rawcdn.githack.com/rlaphoenix/hdlg/50bab8126da83a63e83bf6a5ce3d4d1f737ced2b/banner.png)
 
 [![Build status](https://github.com/rlaphoenix/hdlg/actions/workflows/ci.yml/badge.svg)](https://github.com/rlaphoenix/hdlg/actions/workflows/ci.yml)
